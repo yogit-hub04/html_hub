@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A Creator</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --card: #ffffff;
+            --text: #2d2d2d;
+            --primary: #6c63ff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 90px;
+        }
+
+        button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .add-btn { background: var(--primary); color: white; }
+        .submit-btn { background: #28a745; color: white; }
+        .download-btn { background: #ff5722; color: white; }
+        .json-btn { background: #009688; color: white; }
+        .reset-btn { background: orange; color: white; }
+
+        .cancel-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+        }
+
+        #resultSection {
+            margin-top: 40px;
+            border-top: 2px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .answer-text {
+            white-space: pre-wrap;  /* IMPORTANT FIX */
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #00ff88;
+            padding: 14px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Q&A Creator</h2>
+
+        <div id="groups"></div>
+
+        <button class="add-btn" onclick="addGroup()">+ Add Question</button>
+        <button class="submit-btn" onclick="submitData()">Submit</button>
+
+        <div id="resultSection">
+            <h2>Submitted Q&A</h2>
+            <div id="output"></div>
+
+            <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
+            <button class="json-btn" onclick="downloadJSON()">Download JSON</button>
+        </div>
+    </div>
+
+    <script>
+        let questionCount = 0;
+        let finalData = [];
+
+        window.onload = function () {
+            const saved = localStorage.getItem("qaDraft");
+            if (saved) {
+                const draft = JSON.parse(saved);
+                draft.forEach(item => addGroup(item));
+            } else {
+                addGroup();
+            }
+        };
+
+        function addGroup(data = {}) {
+            questionCount++;
+
+            const group = document.createElement("div");
+            group.className = "card";
+
+            group.innerHTML = `
+                <button type="button" class="cancel-btn">✖</button>
+                <div class="title">Question ${questionCount}</div>
+                <input type="text" placeholder="Enter Question" value="${data.question || ''}">
+                <textarea placeholder="Enter Answer">${data.answer || ''}</textarea>
+                <textarea placeholder="Enter Example Code">${data.code || ''}</textarea>
+                <button class="reset-btn">Reset</button>
+            `;
+
+            group.querySelector(".cancel-btn").onclick = () => {
+                group.remove();
+                updateTitles();
+                saveDraft();
+            };
+
+            group.querySelector(".reset-btn").onclick = () => {
+                group.querySelectorAll("input, textarea").forEach(el => el.value = "");
+                saveDraft();
+            };
+
+            group.querySelectorAll("input, textarea").forEach(el =>
+                el.addEventListener("input", saveDraft)
+            );
+
+            document.getElementById("groups").appendChild(group);
+        }
+
+        function updateTitles() {
+            const cards = document.querySelectorAll("#groups .card");
+            questionCount = 0;
+            cards.forEach(card => {
+                questionCount++;
+                card.querySelector(".title").textContent = "Question " + questionCount;
+            });
+        }
+
+        function saveDraft() {
+            const cards = document.querySelectorAll("#groups .card");
+            let draft = [];
+
+            cards.forEach(card => {
+                const inputs = card.querySelectorAll("input, textarea");
+                draft.push({
+                    question: inputs[0].value,
+                    answer: inputs[1].value,
+                    code: inputs[2].value
+                });
+            });
+
+            localStorage.setItem("qaDraft", JSON.stringify(draft));
+        }
+
+        function submitData() {
+            const cards = document.querySelectorAll("#groups .card");
+            finalData = [];
+
+            cards.forEach((card, index) => {
+                const inputs = card.querySelectorAll("input, textarea");
+
+                const question = inputs[0].value.trim();
+                const answer = inputs[1].value;
+                const code = inputs[2].value.trim();
+
+                if (question !== "") {
+
+                    let obj = {
+                        number: index + 1,
+                        question: question,
+                        answer: answer
+                    };
+
+                    if (code !== "") {
+                        obj.code = code;
+                    }
+
+                    finalData.push(obj);
+                }
+            });
+
+            displayResults();
+        }
+
+        function displayResults() {
+            const output = document.getElementById("output");
+            output.innerHTML = "";
+
+            finalData.forEach(item => {
+
+                const card = document.createElement("div");
+                card.className = "card";
+
+                const title = document.createElement("div");
+                title.className = "title";
+                title.textContent = `${item.number}. ${item.question}`;
+
+                const answer = document.createElement("div");
+                answer.className = "answer-text";
+                answer.textContent = item.answer; // preserves line breaks
+
+                card.appendChild(title);
+                card.appendChild(answer);
+
+                if (item.code) {
+                    const pre = document.createElement("pre");
+                    pre.textContent = item.code;
+                    card.appendChild(pre);
+                }
+
+                output.appendChild(card);
+            });
+        }
+
+        function downloadJSON() {
+            const blob = new Blob(
+                [JSON.stringify(finalData, null, 2)],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "qa-data.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById("resultSection");
+
+            const canvas = await html2canvas(element, { scale: 2 });
+            const imgData = canvas.toDataURL("image/png");
+
+            const pdf = new jsPDF("p", "mm", "a4");
+            const imgWidth = 190;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+            pdf.save("qa-export.pdf");
+        }
+    </script>
+</body>
+</html>
