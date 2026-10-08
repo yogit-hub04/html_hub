@@ -2,387 +2,2991 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Q&A Creator</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- =====================================================
+     GOOGLE FONT
+====================================================== -->
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     PDF LIBRARIES
+====================================================== -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+<!-- =====================================================
+     HIGHLIGHT.JS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
+>
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js">
+</script>
+
 
 <style>
 
-:root{
---primary:#6c63ff;
---bg:#f4f6fb;
+/* =====================================================
+   GLOBAL
+====================================================== */
+
+:root {
+
+    --primary: #6c63ff;
+
+    --primary-dark: #574fd6;
+
+    --bg: #f4f6fb;
+
+    --border: #dddddd;
+
+    --text: #222222;
+
 }
 
-body{
-font-family:Poppins;
-background:var(--bg);
-padding:20px;
-margin:0;
+
+* {
+    box-sizing: border-box;
 }
 
-.container{
-max-width:1000px;
-margin:auto;
+
+body {
+
+    font-family: Poppins, sans-serif;
+
+    background: var(--bg);
+
+    margin: 0;
+
+    padding: 15px;
+
+    color: var(--text);
+
 }
 
-.card{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:14px;
-box-shadow:0 8px 20px rgba(0,0,0,0.08);
-position:relative;
-overflow:hidden;
+
+.container {
+
+    max-width: 1000px;
+
+    margin: auto;
+
 }
 
-.title{
-font-weight:600;
-color:var(--primary);
-margin-bottom:10px;
+
+/* =====================================================
+   HEADINGS
+====================================================== */
+
+h2 {
+
+    font-size: 21px;
+
+    margin: 8px 0 15px;
+
 }
 
-input, textarea{
-width:100%;
-max-width:100%;
-padding:12px;
-margin-top:8px;
-border-radius:8px;
-border:1px solid #ddd;
-font-family:Poppins;
-box-sizing:border-box;
-resize:vertical;
+
+/* =====================================================
+   QUESTION CARD
+====================================================== */
+
+.card {
+
+    background: #ffffff;
+
+    padding: 12px 14px;
+
+    margin-bottom: 10px;
+
+    border-radius: 9px;
+
+    border: 1px solid #e5e5e5;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.05);
+
+    position: relative;
+
+    overflow: hidden;
+
 }
 
-textarea{
-min-height:90px;
+
+/* =====================================================
+   QUESTION TITLE
+====================================================== */
+
+.title {
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: var(--primary);
+
+    margin-bottom: 5px;
+
+    padding-right: 40px;
+
+    line-height: 1.4;
+
 }
 
-button{
-padding:8px 14px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin-top:10px;
+
+/* =====================================================
+   INPUT
+====================================================== */
+
+input,
+textarea {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    padding: 8px 10px;
+
+    margin-top: 6px;
+
+    border-radius: 7px;
+
+    border: 1px solid var(--border);
+
+    font-family: Poppins, sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+    background: #ffffff;
+
+    color: #222222;
+
+    outline: none;
+
 }
 
-.add-btn{background:var(--primary);color:white;}
-.submit-btn{background:#28a745;color:white;}
-.download-btn{background:#ff5722;color:white;}
-.json-btn{background:#009688;color:white;}
 
-.cancel-btn{
-position:absolute;
-top:12px;
-right:12px;
-background:red;
-color:white;
-border-radius:50%;
-font-size:9px;
+/* =====================================================
+   QUESTION INPUT
+====================================================== */
+
+input {
+
+    height: 37px;
+
 }
 
-pre{
-background:#1e1e1e;
-color:#00ff88;
-padding:12px;
-border-radius:8px;
-white-space:pre-wrap;
+
+/* =====================================================
+   ANSWER + CODE INPUT
+====================================================== */
+
+textarea {
+
+    height: 65px;
+
+    min-height: 65px;
+
+    max-height: 65px;
+
+    resize: none;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
 }
 
-.answer-text{
-white-space:pre-wrap;
+
+/* =====================================================
+   TEXTAREA SCROLLBAR
+====================================================== */
+
+textarea::-webkit-scrollbar {
+
+    width: 6px;
+
 }
 
-.upload-area{
-margin-bottom:25px;
-display:flex;
-align-items:center;
-gap:10px;
+
+textarea::-webkit-scrollbar-track {
+
+    background: #f1f1f1;
+
 }
 
-.upload-btn{
-background:linear-gradient(135deg,#6c63ff,#8f88ff);
-color:white;
-padding:10px 18px;
-border-radius:10px;
-cursor:pointer;
-font-weight:500;
-transition:0.3s;
+
+textarea::-webkit-scrollbar-thumb {
+
+    background: #b5b5b5;
+
+    border-radius: 5px;
+
 }
 
-.upload-btn:hover{
-transform:scale(1.05);
+
+/* =====================================================
+   FOCUS
+====================================================== */
+
+input:focus,
+textarea:focus {
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 2px rgba(108, 99, 255, 0.10);
+
 }
 
-#jsonUpload{
-display:none;
+
+/* =====================================================
+   BUTTONS
+====================================================== */
+
+button {
+
+    padding: 8px 14px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    margin-top: 8px;
+
+    font-family: Poppins, sans-serif;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+
+}
+
+
+button:hover {
+
+    transform: translateY(-1px);
+
+}
+
+
+button:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+.add-btn {
+
+    background: var(--primary);
+
+    color: white;
+
+}
+
+
+.submit-btn {
+
+    background: #28a745;
+
+    color: white;
+
+}
+
+
+.download-btn {
+
+    background: #ff5722;
+
+    color: white;
+
+}
+
+
+.json-btn {
+
+    background: #009688;
+
+    color: white;
+
+}
+
+
+/* =====================================================
+   DELETE BUTTON
+====================================================== */
+
+.cancel-btn {
+
+    position: absolute;
+
+    top: 9px;
+
+    right: 10px;
+
+    width: 27px;
+
+    height: 27px;
+
+    padding: 0;
+
+    margin: 0;
+
+    background: #ff2d2d;
+
+    color: white;
+
+    border-radius: 50%;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.cancel-btn:hover {
+
+    background: #d90000;
+
+}
+
+
+/* =====================================================
+   UPLOAD
+====================================================== */
+
+.upload-area {
+
+    margin-bottom: 15px;
+
+}
+
+
+.upload-btn {
+
+    display: inline-block;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6c63ff,
+            #8f88ff
+        );
+
+    color: white;
+
+    padding: 8px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+#jsonUpload {
+
+    display: none;
+
+}
+
+
+/* =====================================================
+   ANSWER DISPLAY
+====================================================== */
+
+.answer-text {
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    overflow-wrap: break-word;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =====================================================
+   CODE CONTAINER
+====================================================== */
+
+.code-container {
+
+    margin-top: 8px;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background: #1e1e1e;
+
+    border: 1px solid #2d2d2d;
+
+}
+
+
+/* =====================================================
+   CODE HEADER
+====================================================== */
+
+.code-header {
+
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 12px;
+
+    background: #252526;
+
+    color: #ffffff;
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    border-bottom: 1px solid #333333;
+
+}
+
+
+.code-icon {
+
+    margin-right: 7px;
+
+    color: #cccccc;
+
+}
+
+
+.code-language {
+
+    color: #ffffff;
+
+    font-weight: 600;
+
+}
+
+
+/* =====================================================
+   CODE
+====================================================== */
+
+.code-container pre {
+
+    margin: 0;
+
+    padding: 12px;
+
+    background: #1e1e1e;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    overflow-wrap: break-word;
+
+    max-height: 220px;
+
+    overflow-y: auto;
+
+    overflow-x: auto;
+
+}
+
+
+.code-container pre code {
+
+    padding: 0;
+
+    background: transparent;
+
+}
+
+
+/* =====================================================
+   CODE SCROLLBAR
+====================================================== */
+
+.code-container pre::-webkit-scrollbar {
+
+    width: 6px;
+
+    height: 6px;
+
+}
+
+
+.code-container pre::-webkit-scrollbar-track {
+
+    background: #1e1e1e;
+
+}
+
+
+.code-container pre::-webkit-scrollbar-thumb {
+
+    background: #555555;
+
+    border-radius: 5px;
+
+}
+
+
+/* =====================================================
+   PDF HIDDEN CONTAINER
+====================================================== */
+
+#pdfContainer {
+
+    position: absolute;
+
+    left: -10000px;
+
+    top: 0;
+
+    width: 800px;
+
+    background: #ffffff;
+
+}
+
+
+/* =====================================================
+   PDF CARD
+====================================================== */
+
+.pdf-card {
+
+    background: #ffffff;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid #dddddd;
+
+    border-radius: 8px;
+
+    width: 800px;
+
+}
+
+
+/* =====================================================
+   PDF TITLE
+====================================================== */
+
+.pdf-title {
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    color: #6c63ff;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =====================================================
+   PDF ANSWER
+====================================================== */
+
+.pdf-answer {
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+}
+
+
+/* =====================================================
+   PDF CODE
+====================================================== */
+
+.pdf-card .code-container pre {
+
+    max-height: none;
+
+    overflow: visible;
+
+}
+
+
+/* =====================================================
+   DOWNLOAD PROGRESS OVERLAY
+====================================================== */
+
+.download-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 9999;
+
+}
+
+
+.download-overlay.show {
+
+    display: flex;
+
+}
+
+
+/* =====================================================
+   DOWNLOAD BOX
+====================================================== */
+
+.download-box {
+
+    width: 360px;
+
+    max-width: 90%;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.25);
+
+    text-align: center;
+
+}
+
+
+/* =====================================================
+   DOWNLOAD TITLE
+====================================================== */
+
+.download-title {
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    color: #333333;
+
+    margin-bottom: 5px;
+
+}
+
+
+/* =====================================================
+   DOWNLOAD FILE NAME
+====================================================== */
+
+.download-filename {
+
+    font-size: 11px;
+
+    color: #777777;
+
+    margin-bottom: 15px;
+
+    word-break: break-all;
+
+}
+
+
+/* =====================================================
+   PROGRESS BAR
+====================================================== */
+
+.progress-track {
+
+    width: 100%;
+
+    height: 9px;
+
+    background: #eeeeee;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   PROGRESS
+====================================================== */
+
+.progress-bar {
+
+    width: 0%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6c63ff,
+            #8f88ff
+        );
+
+    border-radius: 10px;
+
+    transition:
+        width 0.2s ease;
+
+}
+
+
+/* =====================================================
+   PROGRESS TEXT
+====================================================== */
+
+.progress-percent {
+
+    margin-top: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #6c63ff;
+
+}
+
+
+/* =====================================================
+   PROGRESS STATUS
+====================================================== */
+
+.progress-status {
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    color: #777777;
+
+}
+
+
+/* =====================================================
+   SUCCESS
+====================================================== */
+
+.download-success {
+
+    color: #28a745;
+
+    font-weight: 600;
+
+}
+
+
+/* =====================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 10px;
+
+    }
+
+
+    .card {
+
+        padding: 11px;
+
+    }
+
+
+    input,
+    textarea {
+
+        font-size: 12px;
+
+    }
+
+
+    .download-box {
+
+        width: 320px;
+
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
+
 <h2>Q&A Creator</h2>
+
+
+<!-- =====================================================
+     UPLOAD JSON
+====================================================== -->
 
 <div class="upload-area">
 
-<label for="jsonUpload" class="upload-btn">
-⬆ Upload JSON
-</label>
+    <label
+        for="jsonUpload"
+        class="upload-btn"
+    >
+        ⬆ Upload JSON
+    </label>
 
-<input type="file" id="jsonUpload" accept=".json">
+
+    <input
+        type="file"
+        id="jsonUpload"
+        accept=".json"
+    >
 
 </div>
+
+
+<!-- =====================================================
+     QUESTIONS
+====================================================== -->
 
 <div id="groups"></div>
 
-<button class="add-btn" onclick="addGroup()">+ Add Question</button>
-<button class="submit-btn" onclick="submitData()">Submit</button>
+
+<button
+    class="add-btn"
+    onclick="addGroup()"
+>
+    + Add Question
+</button>
+
+
+<button
+    class="submit-btn"
+    onclick="submitData()"
+>
+    Submit
+</button>
+
 
 <h2>Submitted Q&A</h2>
 
+
 <div id="output"></div>
 
-<button class="download-btn" onclick="downloadPDF()">Download PDF</button>
-<button class="json-btn" onclick="downloadJSON()">Download JSON</button>
+
+<button
+    id="pdfButton"
+    class="download-btn"
+    onclick="downloadPDF()"
+>
+    Download PDF
+</button>
+
+
+<button
+    id="jsonButton"
+    class="json-btn"
+    onclick="downloadJSON()"
+>
+    Download JSON
+</button>
+
 
 </div>
 
+
+<!-- =====================================================
+     HIDDEN PDF AREA
+====================================================== -->
+
+<div id="pdfContainer"></div>
+
+
+<!-- =====================================================
+     DOWNLOAD PROGRESS
+====================================================== -->
+
+<div
+    id="downloadOverlay"
+    class="download-overlay"
+>
+
+    <div class="download-box">
+
+        <div
+            id="downloadTitle"
+            class="download-title"
+        >
+            Preparing download...
+        </div>
+
+
+        <div
+            id="downloadFilename"
+            class="download-filename"
+        >
+        </div>
+
+
+        <div class="progress-track">
+
+            <div
+                id="progressBar"
+                class="progress-bar"
+            >
+            </div>
+
+        </div>
+
+
+        <div
+            id="progressPercent"
+            class="progress-percent"
+        >
+            0%
+        </div>
+
+
+        <div
+            id="progressStatus"
+            class="progress-status"
+        >
+            Preparing file...
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
 
-let questionCount=0
-let finalData=[]
+/* =====================================================
+   GLOBAL VARIABLES
+====================================================== */
 
-function saveDraft(){
+let questionCount = 0;
 
-const cards=document.querySelectorAll("#groups .card")
+let finalData = [];
 
-let draft=[]
 
-cards.forEach(card=>{
+/* =====================================================
+   LANGUAGE DETECTION
+====================================================== */
 
-const inputs=card.querySelectorAll("input,textarea")
+function detectLanguage(
+    code,
+    requestedLanguage = ""
+) {
 
-draft.push({
-question:inputs[0].value,
-answer:inputs[1].value,
-code:inputs[2].value
-})
+    const text =
+        String(code || "").trim();
 
-})
 
-localStorage.setItem("qaDraft",JSON.stringify(draft))
+    const requested =
+        String(requestedLanguage || "")
+            .toLowerCase()
+            .trim();
+
+
+    /* Explicit language */
+
+    if (requested) {
+
+        if (
+            requested === "playwright"
+        ) {
+
+            return "Playwright";
+
+        }
+
+
+        if (
+            requested === "javascript" ||
+            requested === "js"
+        ) {
+
+            return "JavaScript";
+
+        }
+
+
+        if (
+            requested === "typescript" ||
+            requested === "ts"
+        ) {
+
+            return "TypeScript";
+
+        }
+
+
+        if (
+            requested === "python" ||
+            requested === "py"
+        ) {
+
+            return "Python";
+
+        }
+
+
+        if (
+            requested === "java"
+        ) {
+
+            return "Java";
+
+        }
+
+
+        if (
+            requested === "html"
+        ) {
+
+            return "HTML";
+
+        }
+
+
+        if (
+            requested === "css"
+        ) {
+
+            return "CSS";
+
+        }
+
+
+        if (
+            requested === "json"
+        ) {
+
+            return "JSON";
+
+        }
+
+
+        if (
+            requested === "sql"
+        ) {
+
+            return "SQL";
+
+        }
+
+    }
+
+
+    /* Playwright detection */
+
+    const playwrightPatterns = [
+
+        /\bpage\.(goto|click|fill|locator|reload|waitFor|screenshot|getBy)/i,
+
+        /\bpage\.getBy(Role|Text|Label|Placeholder|TestId)/i,
+
+        /\bgetByRole\s*\(/i,
+
+        /\bgetByText\s*\(/i,
+
+        /\bgetByLabel\s*\(/i,
+
+        /\bgetByPlaceholder\s*\(/i,
+
+        /\bgetByTestId\s*\(/i,
+
+        /\bexpect\s*\(/i,
+
+        /\btest\s*\(\s*['"`]/i,
+
+        /\bchromium\./i,
+
+        /\bfirefox\./i,
+
+        /\bwebkit\./i,
+
+        /\bbrowser\./i,
+
+        /\bplaywright\b/i,
+
+        /@playwright\/test/i
+
+    ];
+
+
+    if (
+        playwrightPatterns.some(
+            pattern =>
+                pattern.test(text)
+        )
+    ) {
+
+        return "Playwright";
+
+    }
+
+
+    /* TypeScript */
+
+    if (
+
+        /\binterface\s+\w+/i.test(text) ||
+
+        /\btype\s+\w+\s*=/i.test(text) ||
+
+        /\b(let|const|var)\s+\w+\s*:\s*(string|number|boolean)/i.test(text)
+
+    ) {
+
+        return "TypeScript";
+
+    }
+
+
+    /* Python */
+
+    if (
+
+        /\bdef\s+\w+\s*\(/i.test(text) ||
+
+        /\bimport\s+\w+/i.test(text) ||
+
+        /\bfrom\s+\w+\s+import\s+/i.test(text) ||
+
+        /\bprint\s*\(/i.test(text)
+
+    ) {
+
+        return "Python";
+
+    }
+
+
+    /* Java */
+
+    if (
+
+        /\bpublic\s+class\s+\w+/i.test(text) ||
+
+        /\bpublic\s+static\s+void\s+main/i.test(text)
+
+    ) {
+
+        return "Java";
+
+    }
+
+
+    /* HTML */
+
+    if (
+
+        /<!DOCTYPE\s+html>/i.test(text) ||
+
+        /<html[\s>]/i.test(text) ||
+
+        /<div[\s>]/i.test(text)
+
+    ) {
+
+        return "HTML";
+
+    }
+
+
+    /* CSS */
+
+    if (
+
+        /[.#]?[a-zA-Z0-9_-]+\s*\{[\s\S]*\}/.test(text) &&
+
+        /:\s*[^;]+;/.test(text)
+
+    ) {
+
+        return "CSS";
+
+    }
+
+
+    /* JSON */
+
+    if (
+
+        (
+            text.startsWith("{") &&
+            text.endsWith("}")
+        ) ||
+
+        (
+            text.startsWith("[") &&
+            text.endsWith("]")
+        )
+
+    ) {
+
+        try {
+
+            JSON.parse(text);
+
+            return "JSON";
+
+        }
+
+        catch {
+
+            // Not JSON
+
+        }
+
+    }
+
+
+    /* SQL */
+
+    if (
+
+        /\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP)\b/i.test(text)
+
+    ) {
+
+        return "SQL";
+
+    }
+
+
+    /* JavaScript */
+
+    if (
+
+        /\b(const|let|var)\s+\w+\s*=/i.test(text) ||
+
+        /\bconsole\.log\s*\(/i.test(text) ||
+
+        /=>/.test(text) ||
+
+        /\basync\s+function\b/i.test(text) ||
+
+        /\bawait\s+/i.test(text)
+
+    ) {
+
+        return "JavaScript";
+
+    }
+
+
+    return "Code";
 
 }
 
-function addGroup(data={}){
 
-questionCount++
+/* =====================================================
+   HIGHLIGHT.JS LANGUAGE
+====================================================== */
 
-const group=document.createElement("div")
-group.className="card"
+function getHighlightLanguage(
+    label
+) {
 
-group.innerHTML=`
+    const map = {
 
-<button class="cancel-btn">✖</button>
+        "Playwright":
+            "javascript",
 
-<div class="title">Question ${questionCount}</div>
+        "JavaScript":
+            "javascript",
 
-<input type="text" placeholder="Enter Question" value="${data.question||''}">
+        "TypeScript":
+            "typescript",
 
-<textarea placeholder="Enter Answer">${data.answer||''}</textarea>
+        "Python":
+            "python",
 
-<textarea placeholder="Enter Example Code">${data.code||''}</textarea>
+        "Java":
+            "java",
 
-`
+        "HTML":
+            "xml",
 
-group.querySelector(".cancel-btn").onclick=()=>{
-group.remove()
-updateTitles()
-saveDraft()
-}
+        "CSS":
+            "css",
 
-group.querySelectorAll("input,textarea").forEach(el=>{
-el.addEventListener("input",saveDraft)
-})
+        "JSON":
+            "json",
 
-document.getElementById("groups").appendChild(group)
+        "SQL":
+            "sql"
 
-}
+    };
 
-function updateTitles(){
 
-const cards=document.querySelectorAll("#groups .card")
-
-questionCount=0
-
-cards.forEach(card=>{
-questionCount++
-card.querySelector(".title").textContent="Question "+questionCount
-})
-
-}
-
-document.getElementById("jsonUpload").addEventListener("change",function(e){
-
-const file=e.target.files[0]
-if(!file)return
-
-const reader=new FileReader()
-
-reader.onload=function(event){
-
-const data=JSON.parse(event.target.result)
-
-document.getElementById("groups").innerHTML=""
-questionCount=0
-
-data.forEach(item=>{
-addGroup(item)
-})
-
-saveDraft()
+    return (
+        map[label] ||
+        "plaintext"
+    );
 
 }
 
-reader.readAsText(file)
 
-})
+/* =====================================================
+   CREATE CODE BLOCK
+====================================================== */
 
-function submitData(){
+function createCodeBlock(
+    codeText,
+    requestedLanguage = ""
+) {
 
-const cards=document.querySelectorAll("#groups .card")
+    const codeContainer =
+        document.createElement("div");
 
-finalData=[]
 
-cards.forEach((card,index)=>{
+    codeContainer.className =
+        "code-container";
 
-const inputs=card.querySelectorAll("input,textarea")
 
-const question=inputs[0].value.trim()
-const answer=inputs[1].value
-const code=inputs[2].value.trim()
+    const language =
+        detectLanguage(
+            codeText,
+            requestedLanguage
+        );
 
-if(question!=""){
 
-let obj={
-number:index+1,
-question:question,
-answer:answer
-}
+    /* Header */
 
-if(code!=""){
-obj.code=code
-}
+    const codeHeader =
+        document.createElement("div");
 
-finalData.push(obj)
 
-}
+    codeHeader.className =
+        "code-header";
 
-})
 
-displayResults()
+    const codeIcon =
+        document.createElement("span");
 
-}
 
-function displayResults(){
+    codeIcon.className =
+        "code-icon";
 
-const output=document.getElementById("output")
-output.innerHTML=""
 
-finalData.forEach(item=>{
+    codeIcon.textContent =
+        "</>";
 
-const card=document.createElement("div")
-card.className="card"
 
-const title=document.createElement("div")
-title.className="title"
-title.textContent=item.number+". "+item.question
+    const codeLanguage =
+        document.createElement("span");
 
-const ans=document.createElement("div")
-ans.className="answer-text"
-ans.textContent=item.answer
 
-card.appendChild(title)
-card.appendChild(ans)
+    codeLanguage.className =
+        "code-language";
 
-if(item.code){
 
-const pre=document.createElement("pre")
-pre.textContent=item.code
-card.appendChild(pre)
+    codeLanguage.textContent =
+        language;
 
-}
 
-output.appendChild(card)
+    codeHeader.appendChild(
+        codeIcon
+    );
 
-})
 
-}
+    codeHeader.appendChild(
+        codeLanguage
+    );
 
-function downloadJSON(){
 
-const blob=new Blob([JSON.stringify(finalData,null,2)],{type:"application/json"})
+    /* Code */
 
-const url=URL.createObjectURL(blob)
+    const pre =
+        document.createElement("pre");
 
-const a=document.createElement("a")
 
-a.href=url
-a.download="qa-data.json"
-a.click()
+    const code =
+        document.createElement("code");
 
-}
 
-async function downloadPDF(){
+    const highlightLanguage =
+        getHighlightLanguage(
+            language
+        );
 
-const {jsPDF}=window.jspdf
 
-const element=document.getElementById("output")
+    code.className =
+        `language-${highlightLanguage}`;
 
-const canvas=await html2canvas(element,{scale:2})
 
-const img=canvas.toDataURL("image/png")
+    code.textContent =
+        codeText;
 
-const pdf=new jsPDF("p","mm","a4")
 
-const imgWidth=190
-const imgHeight=(canvas.height*imgWidth)/canvas.width
+    pre.appendChild(
+        code
+    );
 
-pdf.addImage(img,"PNG",10,10,imgWidth,imgHeight)
 
-pdf.save("qa.pdf")
+    codeContainer.appendChild(
+        codeHeader
+    );
 
-}
 
-window.onload=function(){
+    codeContainer.appendChild(
+        pre
+    );
 
-const saved=localStorage.getItem("qaDraft")
 
-if(saved){
+    if (
+        highlightLanguage !==
+        "plaintext"
+    ) {
 
-const draft=JSON.parse(saved)
+        hljs.highlightElement(
+            code
+        );
 
-draft.forEach(item=>{
-addGroup(item)
-})
+    }
 
-}else{
 
-addGroup()
+    return codeContainer;
 
 }
 
+
+/* =====================================================
+   GENERATE FILE NAME
+====================================================== */
+
+function getTimestamp() {
+
+    const now =
+        new Date();
+
+
+    const year =
+        now.getFullYear();
+
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+
+    const hours =
+        String(
+            now.getHours()
+        ).padStart(2, "0");
+
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+
+    const seconds =
+        String(
+            now.getSeconds()
+        ).padStart(2, "0");
+
+
+    return (
+        `${year}-${month}-${day}_` +
+        `${hours}-${minutes}-${seconds}`
+    );
+
 }
+
+
+/* =====================================================
+   DOWNLOAD PROGRESS FUNCTIONS
+====================================================== */
+
+function showDownloadProgress(
+    title,
+    filename
+) {
+
+    const overlay =
+        document.getElementById(
+            "downloadOverlay"
+        );
+
+
+    const titleElement =
+        document.getElementById(
+            "downloadTitle"
+        );
+
+
+    const filenameElement =
+        document.getElementById(
+            "downloadFilename"
+        );
+
+
+    const progressBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    const progressPercent =
+        document.getElementById(
+            "progressPercent"
+        );
+
+
+    const progressStatus =
+        document.getElementById(
+            "progressStatus"
+        );
+
+
+    titleElement.textContent =
+        title;
+
+
+    filenameElement.textContent =
+        filename;
+
+
+    progressBar.style.width =
+        "0%";
+
+
+    progressPercent.textContent =
+        "0%";
+
+
+    progressStatus.textContent =
+        "Preparing file...";
+
+
+    progressStatus.className =
+        "progress-status";
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =====================================================
+   UPDATE PROGRESS
+====================================================== */
+
+function updateDownloadProgress(
+    percent,
+    status
+) {
+
+    const progressBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    const progressPercent =
+        document.getElementById(
+            "progressPercent"
+        );
+
+
+    const progressStatus =
+        document.getElementById(
+            "progressStatus"
+        );
+
+
+    const safePercent =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                Math.round(percent)
+            )
+        );
+
+
+    progressBar.style.width =
+        safePercent + "%";
+
+
+    progressPercent.textContent =
+        safePercent + "%";
+
+
+    if (status) {
+
+        progressStatus.textContent =
+            status;
+
+    }
+
+}
+
+
+/* =====================================================
+   HIDE DOWNLOAD PROGRESS
+====================================================== */
+
+function hideDownloadProgress(
+    success = false
+) {
+
+    const overlay =
+        document.getElementById(
+            "downloadOverlay"
+        );
+
+
+    const progressStatus =
+        document.getElementById(
+            "progressStatus"
+        );
+
+
+    if (success) {
+
+        progressStatus.textContent =
+            "Download started successfully.";
+
+
+        progressStatus.className =
+            "progress-status download-success";
+
+
+        setTimeout(
+            () => {
+
+                overlay.classList.remove(
+                    "show"
+                );
+
+            },
+            1200
+        );
+
+    }
+
+    else {
+
+        overlay.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ENABLE / DISABLE DOWNLOAD BUTTONS
+====================================================== */
+
+function setDownloadButtons(
+    disabled
+) {
+
+    document
+        .getElementById("pdfButton")
+        .disabled =
+        disabled;
+
+
+    document
+        .getElementById("jsonButton")
+        .disabled =
+        disabled;
+
+}
+
+
+/* =====================================================
+   SAVE DRAFT
+====================================================== */
+
+function saveDraft() {
+
+    const cards =
+        document.querySelectorAll(
+            "#groups .card"
+        );
+
+
+    const draft = [];
+
+
+    cards.forEach(card => {
+
+        const inputs =
+            card.querySelectorAll(
+                "input, textarea"
+            );
+
+
+        draft.push({
+
+            question:
+                inputs[0].value,
+
+            answer:
+                inputs[1].value,
+
+            code:
+                inputs[2].value
+
+        });
+
+    });
+
+
+    localStorage.setItem(
+        "qaDraft",
+        JSON.stringify(draft)
+    );
+
+}
+
+
+/* =====================================================
+   ADD QUESTION
+====================================================== */
+
+function addGroup(
+    data = {}
+) {
+
+    questionCount++;
+
+
+    const group =
+        document.createElement(
+            "div"
+        );
+
+
+    group.className =
+        "card";
+
+
+    group.innerHTML = `
+
+        <button
+            class="cancel-btn"
+            title="Delete Question"
+        >
+            ✖
+        </button>
+
+        <div class="title">
+            Question ${questionCount}
+        </div>
+
+        <input
+            type="text"
+            placeholder="Enter Question"
+        >
+
+        <textarea
+            placeholder="Enter Answer"
+        ></textarea>
+
+        <textarea
+            placeholder="Enter Example Code"
+        ></textarea>
+
+    `;
+
+
+    const inputs =
+        group.querySelectorAll(
+            "input, textarea"
+        );
+
+
+    inputs[0].value =
+        data.question || "";
+
+
+    inputs[1].value =
+        data.answer || "";
+
+
+    inputs[2].value =
+        data.code || "";
+
+
+    group
+        .querySelector(".cancel-btn")
+        .onclick =
+        function () {
+
+            group.remove();
+
+            updateTitles();
+
+            saveDraft();
+
+        };
+
+
+    group
+        .querySelectorAll(
+            "input, textarea"
+        )
+        .forEach(
+            element => {
+
+                element.addEventListener(
+                    "input",
+                    saveDraft
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("groups")
+        .appendChild(group);
+
+}
+
+
+/* =====================================================
+   UPDATE TITLES
+====================================================== */
+
+function updateTitles() {
+
+    const cards =
+        document.querySelectorAll(
+            "#groups .card"
+        );
+
+
+    questionCount = 0;
+
+
+    cards.forEach(card => {
+
+        questionCount++;
+
+
+        card
+            .querySelector(".title")
+            .textContent =
+            "Question " +
+            questionCount;
+
+    });
+
+}
+
+
+/* =====================================================
+   JSON UPLOAD
+====================================================== */
+
+document
+    .getElementById("jsonUpload")
+    .addEventListener(
+        "change",
+        function (event) {
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (e) {
+
+                    try {
+
+                        const data =
+                            JSON.parse(
+                                e.target.result
+                            );
+
+
+                        if (
+                            !Array.isArray(data)
+                        ) {
+
+                            alert(
+                                "Invalid JSON format.\n\n" +
+                                "Expected a JSON array."
+                            );
+
+                            return;
+
+                        }
+
+
+                        document
+                            .getElementById(
+                                "groups"
+                            )
+                            .innerHTML =
+                            "";
+
+
+                        questionCount =
+                            0;
+
+
+                        data.forEach(
+                            item => {
+
+                                addGroup({
+
+                                    question:
+                                        item.question || "",
+
+                                    answer:
+                                        item.answer || "",
+
+                                    code:
+                                        item.code || ""
+
+                                });
+
+                            }
+                        );
+
+
+                        saveDraft();
+
+                    }
+
+                    catch (error) {
+
+                        alert(
+                            "Invalid JSON file.\n\n" +
+                            "Please check the JSON format."
+                        );
+
+
+                        console.error(
+                            error
+                        );
+
+                    }
+
+                };
+
+
+            reader.readAsText(file);
+
+        }
+    );
+
+
+/* =====================================================
+   SUBMIT DATA
+====================================================== */
+
+function submitData() {
+
+    const cards =
+        document.querySelectorAll(
+            "#groups .card"
+        );
+
+
+    finalData = [];
+
+
+    cards.forEach(
+        card => {
+
+            const inputs =
+                card.querySelectorAll(
+                    "input, textarea"
+                );
+
+
+            const question =
+                inputs[0].value.trim();
+
+
+            const answer =
+                inputs[1].value.trim();
+
+
+            const code =
+                inputs[2].value.trim();
+
+
+            if (
+                question !== ""
+            ) {
+
+                const obj = {
+
+                    number:
+                        finalData.length + 1,
+
+                    question:
+                        question,
+
+                    answer:
+                        answer
+
+                };
+
+
+                if (
+                    code !== ""
+                ) {
+
+                    obj.code =
+                        code;
+
+                }
+
+
+                finalData.push(
+                    obj
+                );
+
+            }
+
+        }
+    );
+
+
+    if (
+        finalData.length === 0
+    ) {
+
+        alert(
+            "Please enter at least one question."
+        );
+
+        return;
+
+    }
+
+
+    displayResults();
+
+}
+
+
+/* =====================================================
+   DISPLAY RESULTS
+====================================================== */
+
+function displayResults() {
+
+    const output =
+        document.getElementById(
+            "output"
+        );
+
+
+    output.innerHTML =
+        "";
+
+
+    finalData.forEach(
+        item => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card";
+
+
+            /* Question */
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+
+            title.className =
+                "title";
+
+
+            title.textContent =
+                item.number +
+                ". " +
+                item.question;
+
+
+            card.appendChild(
+                title
+            );
+
+
+            /* Answer */
+
+            const answer =
+                document.createElement(
+                    "div"
+                );
+
+
+            answer.className =
+                "answer-text";
+
+
+            answer.textContent =
+                item.answer;
+
+
+            card.appendChild(
+                answer
+            );
+
+
+            /* Code */
+
+            if (
+                item.code
+            ) {
+
+                const codeBlock =
+                    createCodeBlock(
+                        item.code
+                    );
+
+
+                card.appendChild(
+                    codeBlock
+                );
+
+            }
+
+
+            output.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DOWNLOAD JSON
+====================================================== */
+
+async function downloadJSON() {
+
+    if (
+        finalData.length === 0
+    ) {
+
+        alert(
+            "Please submit the Q&A before downloading JSON."
+        );
+
+        return;
+
+    }
+
+
+    const filename =
+        "QA_Data_" +
+        getTimestamp() +
+        ".json";
+
+
+    showDownloadProgress(
+        "Preparing JSON...",
+        filename
+    );
+
+
+    setDownloadButtons(
+        true
+    );
+
+
+    try {
+
+        updateDownloadProgress(
+            20,
+            "Preparing Q&A data..."
+        );
+
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    150
+                )
+        );
+
+
+        updateDownloadProgress(
+            50,
+            "Creating JSON file..."
+        );
+
+
+        const json =
+            JSON.stringify(
+                finalData,
+                null,
+                2
+            );
+
+
+        const blob =
+            new Blob(
+                [json],
+                {
+                    type:
+                        "application/json"
+                }
+            );
+
+
+        updateDownloadProgress(
+            80,
+            "Preparing download..."
+        );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            filename;
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        document.body.removeChild(
+            link
+        );
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+
+        updateDownloadProgress(
+            100,
+            "Download started."
+        );
+
+
+        hideDownloadProgress(
+            true
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "JSON download error:",
+            error
+        );
+
+
+        hideDownloadProgress(
+            false
+        );
+
+
+        alert(
+            "Failed to download JSON file."
+        );
+
+    }
+
+    finally {
+
+        setDownloadButtons(
+            false
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   DOWNLOAD PDF
+====================================================== */
+
+async function downloadPDF() {
+
+    if (
+        finalData.length === 0
+    ) {
+
+        alert(
+            "Please submit the Q&A before downloading the PDF."
+        );
+
+        return;
+
+    }
+
+
+    const filename =
+        "QA_Report_" +
+        getTimestamp() +
+        ".pdf";
+
+
+    showDownloadProgress(
+        "Preparing PDF...",
+        filename
+    );
+
+
+    setDownloadButtons(
+        true
+    );
+
+
+    try {
+
+        const { jsPDF } =
+            window.jspdf;
+
+
+        const pdf =
+            new jsPDF(
+                "p",
+                "mm",
+                "a4"
+            );
+
+
+        const pageWidth =
+            210;
+
+
+        const pageHeight =
+            297;
+
+
+        const margin =
+            10;
+
+
+        const usableWidth =
+            pageWidth -
+            (margin * 2);
+
+
+        const usableHeight =
+            pageHeight -
+            (margin * 2);
+
+
+        let currentY =
+            margin;
+
+
+        const totalQuestions =
+            finalData.length;
+
+
+        /* =============================================
+           PROCESS EVERY QUESTION
+        ============================================== */
+
+        for (
+            let i = 0;
+            i < totalQuestions;
+            i++
+        ) {
+
+            const item =
+                finalData[i];
+
+
+            /*
+             * Progress:
+             * First 10% = preparation
+             * Remaining 85% = questions
+             * Last 5% = saving
+             */
+
+            const progress =
+                10 +
+                (
+                    (i / totalQuestions) *
+                    85
+                );
+
+
+            updateDownloadProgress(
+                progress,
+                `Generating question ${i + 1} of ${totalQuestions}...`
+            );
+
+
+            /* =========================================
+               PDF CARD
+            ========================================== */
+
+            const pdfCard =
+                document.createElement(
+                    "div"
+                );
+
+
+            pdfCard.className =
+                "pdf-card";
+
+
+            /* =========================================
+               TITLE
+            ========================================== */
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+
+            title.className =
+                "pdf-title";
+
+
+            title.textContent =
+                item.number +
+                ". " +
+                item.question;
+
+
+            pdfCard.appendChild(
+                title
+            );
+
+
+            /* =========================================
+               ANSWER
+            ========================================== */
+
+            const answer =
+                document.createElement(
+                    "div"
+                );
+
+
+            answer.className =
+                "pdf-answer";
+
+
+            answer.textContent =
+                item.answer;
+
+
+            pdfCard.appendChild(
+                answer
+            );
+
+
+            /* =========================================
+               CODE
+            ========================================== */
+
+            if (
+                item.code
+            ) {
+
+                const codeBlock =
+                    createCodeBlock(
+                        item.code
+                    );
+
+
+                pdfCard.appendChild(
+                    codeBlock
+                );
+
+            }
+
+
+            /* =========================================
+               TEMPORARY PDF CONTAINER
+            ========================================== */
+
+            const pdfContainer =
+                document.getElementById(
+                    "pdfContainer"
+                );
+
+
+            pdfContainer.innerHTML =
+                "";
+
+
+            pdfContainer.appendChild(
+                pdfCard
+            );
+
+
+            /* =========================================
+               WAIT FOR RENDER
+            ========================================== */
+
+            await new Promise(
+                resolve =>
+                    requestAnimationFrame(
+                        resolve
+                    )
+            );
+
+
+            /* =========================================
+               CANVAS
+            ========================================== */
+
+            const canvas =
+                await html2canvas(
+                    pdfCard,
+                    {
+
+                        scale: 2,
+
+                        useCORS: true,
+
+                        backgroundColor:
+                            "#ffffff",
+
+                        logging: false
+
+                    }
+                );
+
+
+            const imgData =
+                canvas.toDataURL(
+                    "image/png"
+                );
+
+
+            const imgWidth =
+                usableWidth;
+
+
+            const imgHeight =
+                (
+                    canvas.height *
+                    imgWidth
+                ) /
+                canvas.width;
+
+
+            /* =========================================
+               NORMAL CARD
+            ========================================== */
+
+            if (
+                imgHeight <=
+                usableHeight
+            ) {
+
+                if (
+                    currentY +
+                    imgHeight >
+                    pageHeight -
+                    margin
+                ) {
+
+                    pdf.addPage();
+
+                    currentY =
+                        margin;
+
+                }
+
+
+                pdf.addImage(
+
+                    imgData,
+
+                    "PNG",
+
+                    margin,
+
+                    currentY,
+
+                    imgWidth,
+
+                    imgHeight
+
+                );
+
+
+                currentY +=
+                    imgHeight + 5;
+
+            }
+
+
+            /* =========================================
+               VERY LONG CARD
+            ========================================== */
+
+            else {
+
+                if (
+                    currentY !== margin
+                ) {
+
+                    pdf.addPage();
+
+                }
+
+
+                currentY =
+                    margin;
+
+
+                const scale =
+                    usableHeight /
+                    imgHeight;
+
+
+                const scaledWidth =
+                    imgWidth *
+                    scale;
+
+
+                const scaledHeight =
+                    usableHeight;
+
+
+                const centeredX =
+                    (
+                        pageWidth -
+                        scaledWidth
+                    ) / 2;
+
+
+                pdf.addImage(
+
+                    imgData,
+
+                    "PNG",
+
+                    centeredX,
+
+                    margin,
+
+                    scaledWidth,
+
+                    scaledHeight
+
+                );
+
+
+                if (
+                    i <
+                    totalQuestions - 1
+                ) {
+
+                    pdf.addPage();
+
+                }
+
+
+                currentY =
+                    margin;
+
+            }
+
+
+            /*
+             * Allow browser to update
+             * progress bar.
+             */
+
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        10
+                    )
+            );
+
+        }
+
+
+        /* =============================================
+           FINALIZE
+        ========================================== */
+
+        updateDownloadProgress(
+            95,
+            "Finalizing PDF..."
+        );
+
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    100
+                )
+        );
+
+
+        /* =============================================
+           SAVE
+        ========================================== */
+
+        pdf.save(
+            filename
+        );
+
+
+        updateDownloadProgress(
+            100,
+            "Download started."
+        );
+
+
+        hideDownloadProgress(
+            true
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "PDF download error:",
+            error
+        );
+
+
+        hideDownloadProgress(
+            false
+        );
+
+
+        alert(
+            "Failed to generate the PDF.\n\n" +
+            error.message
+        );
+
+    }
+
+    finally {
+
+        setDownloadButtons(
+            false
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD SAVED DRAFT
+====================================================== */
+
+window.onload =
+    function () {
+
+        const saved =
+            localStorage.getItem(
+                "qaDraft"
+            );
+
+
+        if (saved) {
+
+            try {
+
+                const draft =
+                    JSON.parse(
+                        saved
+                    );
+
+
+                if (
+                    Array.isArray(draft) &&
+                    draft.length > 0
+                ) {
+
+                    draft.forEach(
+                        item => {
+
+                            addGroup(
+                                item
+                            );
+
+                        }
+                    );
+
+                }
+
+                else {
+
+                    addGroup();
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Failed to load draft:",
+                    error
+                );
+
+
+                addGroup();
+
+            }
+
+        }
+
+        else {
+
+            addGroup();
+
+        }
+
+    };
 
 </script>
 
