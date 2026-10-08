@@ -1,2995 +1,3268 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Q&A Creator</title>
 
-
-<!-- =====================================================
-     GOOGLE FONT
-====================================================== -->
-
 <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-    rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+  rel="stylesheet"
 >
-
-
-<!-- =====================================================
-     PDF LIBRARIES
-====================================================== -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-
-<!-- =====================================================
-     HIGHLIGHT.JS
-====================================================== -->
-
 <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
 >
 
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js">
-</script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 <style>
 
-/* =====================================================
+/* =========================================================
    GLOBAL
-====================================================== */
-
-:root {
-
-    --primary: #6c63ff;
-
-    --primary-dark: #574fd6;
-
-    --bg: #f4f6fb;
-
-    --border: #dddddd;
-
-    --text: #222222;
-
-}
-
+========================================================= */
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
-
 
 body {
-
-    font-family: Poppins, sans-serif;
-
-    background: var(--bg);
-
-    margin: 0;
-
-    padding: 15px;
-
-    color: var(--text);
-
+  margin: 0;
+  background: #f5f7fb;
+  font-family: "Poppins", sans-serif;
+  color: #20242c;
 }
-
 
 .container {
-
-    max-width: 1000px;
-
-    margin: auto;
-
+  width: 95%;
+  max-width: 1100px;
+  margin: 25px auto;
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
 }
 
+/* =========================================================
+   HEADER
+========================================================= */
 
-/* =====================================================
-   HEADINGS
-====================================================== */
-
-h2 {
-
-    font-size: 21px;
-
-    margin: 8px 0 15px;
-
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-
-/* =====================================================
-   QUESTION CARD
-====================================================== */
-
-.card {
-
-    background: #ffffff;
-
-    padding: 12px 14px;
-
-    margin-bottom: 10px;
-
-    border-radius: 9px;
-
-    border: 1px solid #e5e5e5;
-
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.05);
-
-    position: relative;
-
-    overflow: hidden;
-
+.heading-input {
+  width: 100%;
+  max-width: 650px;
+  height: 44px;
+  border: 1px solid #d7dce5;
+  border-radius: 9px;
+  padding: 0 13px;
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 600;
+  color: #20242c;
+  outline: none;
+  background: #ffffff;
 }
 
-
-/* =====================================================
-   QUESTION TITLE
-====================================================== */
-
-.title {
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    color: var(--primary);
-
-    margin-bottom: 5px;
-
-    padding-right: 40px;
-
-    line-height: 1.4;
-
+.heading-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.08);
 }
 
-
-/* =====================================================
-   INPUT
-====================================================== */
-
-input,
-textarea {
-
-    width: 100%;
-
-    max-width: 100%;
-
-    padding: 8px 10px;
-
-    margin-top: 6px;
-
-    border-radius: 7px;
-
-    border: 1px solid var(--border);
-
-    font-family: Poppins, sans-serif;
-
-    font-size: 13px;
-
-    line-height: 1.4;
-
-    background: #ffffff;
-
-    color: #222222;
-
-    outline: none;
-
+.heading-input::placeholder {
+  color: #9ca3af;
+  font-weight: 500;
 }
 
+/* =========================================================
+   HISTORY BUTTON
+========================================================= */
 
-/* =====================================================
-   QUESTION INPUT
-====================================================== */
-
-input {
-
-    height: 37px;
-
+.history-btn {
+  flex-shrink: 0;
+  border: none;
+  background: #111827;
+  color: white;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition: 0.2s;
 }
 
-
-/* =====================================================
-   ANSWER + CODE INPUT
-====================================================== */
-
-textarea {
-
-    height: 65px;
-
-    min-height: 65px;
-
-    max-height: 65px;
-
-    resize: none;
-
-    overflow-y: auto;
-
-    overflow-x: hidden;
-
+.history-btn:hover {
+  background: #000000;
+  transform: translateY(-1px);
 }
 
-
-/* =====================================================
-   TEXTAREA SCROLLBAR
-====================================================== */
-
-textarea::-webkit-scrollbar {
-
-    width: 6px;
-
-}
-
-
-textarea::-webkit-scrollbar-track {
-
-    background: #f1f1f1;
-
-}
-
-
-textarea::-webkit-scrollbar-thumb {
-
-    background: #b5b5b5;
-
-    border-radius: 5px;
-
-}
-
-
-/* =====================================================
-   FOCUS
-====================================================== */
-
-input:focus,
-textarea:focus {
-
-    border-color: var(--primary);
-
-    box-shadow:
-        0 0 0 2px rgba(108, 99, 255, 0.10);
-
-}
-
-
-/* =====================================================
-   BUTTONS
-====================================================== */
-
-button {
-
-    padding: 8px 14px;
-
-    border: none;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-
-    margin-top: 8px;
-
-    font-family: Poppins, sans-serif;
-
-    font-size: 13px;
-
-    transition: 0.2s;
-
-}
-
-
-button:hover {
-
-    transform: translateY(-1px);
-
-}
-
-
-button:disabled {
-
-    opacity: 0.6;
-
-    cursor: not-allowed;
-
-    transform: none;
-
-}
-
-
-.add-btn {
-
-    background: var(--primary);
-
-    color: white;
-
-}
-
-
-.submit-btn {
-
-    background: #28a745;
-
-    color: white;
-
-}
-
-
-.download-btn {
-
-    background: #ff5722;
-
-    color: white;
-
-}
-
-
-.json-btn {
-
-    background: #009688;
-
-    color: white;
-
-}
-
-
-/* =====================================================
-   DELETE BUTTON
-====================================================== */
-
-.cancel-btn {
-
-    position: absolute;
-
-    top: 9px;
-
-    right: 10px;
-
-    width: 27px;
-
-    height: 27px;
-
-    padding: 0;
-
-    margin: 0;
-
-    background: #ff2d2d;
-
-    color: white;
-
-    border-radius: 50%;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-}
-
-
-.cancel-btn:hover {
-
-    background: #d90000;
-
-}
-
-
-/* =====================================================
+/* =========================================================
    UPLOAD
-====================================================== */
+========================================================= */
 
 .upload-area {
-
-    margin-bottom: 15px;
-
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
 }
-
 
 .upload-btn {
-
-    display: inline-block;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6c63ff,
-            #8f88ff
-        );
-
-    color: white;
-
-    padding: 8px 15px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-size: 13px;
-
-    font-weight: 500;
-
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef2ff;
+  color: #4338ca;
+  border: 1px solid #c7d2fe;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
 }
 
+.upload-btn:hover {
+  background: #e0e7ff;
+}
 
 #jsonUpload {
-
-    display: none;
-
+  display: none;
 }
 
+/* =========================================================
+   QUESTION CARD
+========================================================= */
 
-/* =====================================================
-   ANSWER DISPLAY
-====================================================== */
-
-.answer-text {
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
-
-    overflow-wrap: break-word;
-
-    font-size: 13px;
-
-    line-height: 1.5;
-
+.qa-card {
+  background: #fafbfe;
+  border: 1px solid #e1e5ec;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  position: relative;
 }
 
+.qa-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
 
-/* =====================================================
-   CODE CONTAINER
-====================================================== */
+.qa-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.delete-btn {
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-btn:hover {
+  background: #fecaca;
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.question-input,
+.answer-input,
+.code-input {
+  width: 100%;
+  border: 1px solid #d9dee8;
+  border-radius: 7px;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  padding: 9px 11px;
+  margin-bottom: 8px;
+}
+
+.question-input {
+  height: 42px;
+}
+
+.answer-input,
+.code-input {
+  height: 65px;
+  resize: vertical;
+  overflow-y: auto;
+}
+
+.question-input:focus,
+.answer-input:focus,
+.code-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.08);
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.add-btn,
+.submit-btn,
+.restart-btn,
+.download-btn,
+.json-btn {
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  padding: 0 17px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-right: 7px;
+}
+
+.add-btn {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.add-btn:hover {
+  background: #e0e7ff;
+}
+
+.submit-btn {
+  background: #4f46e5;
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #4338ca;
+}
+
+.restart-btn {
+  background: #fff1f2;
+  color: #dc2626;
+}
+
+.restart-btn:hover {
+  background: #ffe4e6;
+}
+
+.download-btn {
+  background: #059669;
+  color: white;
+}
+
+.download-btn:hover {
+  background: #047857;
+}
+
+.json-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.json-btn:hover {
+  background: #1d4ed8;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   OUTPUT
+========================================================= */
+
+.output-title {
+  margin-top: 25px;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.result-card {
+  border: 1px solid #e1e5ec;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 12px;
+  background: white;
+}
+
+.result-question {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+.result-answer {
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin-bottom: 10px;
+  color: #4b5563;
+}
+
+/* =========================================================
+   CODE
+========================================================= */
 
 .code-container {
-
-    margin-top: 8px;
-
-    border-radius: 8px;
-
-    overflow: hidden;
-
-    background: #1e1e1e;
-
-    border: 1px solid #2d2d2d;
-
+  margin-top: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #293241;
+  background: #0d1117;
 }
-
-
-/* =====================================================
-   CODE HEADER
-====================================================== */
 
 .code-header {
-
-    height: 32px;
-
-    display: flex;
-
-    align-items: center;
-
-    padding: 0 12px;
-
-    background: #252526;
-
-    color: #ffffff;
-
-    font-size: 11px;
-
-    font-weight: 500;
-
-    border-bottom: 1px solid #333333;
-
+  background: #161b22;
+  color: #c9d1d9;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  border-bottom: 1px solid #30363d;
 }
-
-
-.code-icon {
-
-    margin-right: 7px;
-
-    color: #cccccc;
-
-}
-
-
-.code-language {
-
-    color: #ffffff;
-
-    font-weight: 600;
-
-}
-
-
-/* =====================================================
-   CODE
-====================================================== */
 
 .code-container pre {
-
-    margin: 0;
-
-    padding: 12px;
-
-    background: #1e1e1e;
-
-    font-family:
-        Consolas,
-        "Courier New",
-        monospace;
-
-    font-size: 12px;
-
-    line-height: 1.6;
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
-
-    overflow-wrap: break-word;
-
-    max-height: 220px;
-
-    overflow-y: auto;
-
-    overflow-x: auto;
-
+  margin: 0;
+  max-height: 280px;
+  overflow: auto;
 }
 
-
-.code-container pre code {
-
-    padding: 0;
-
-    background: transparent;
-
+.code-container code {
+  font-size: 12px;
+  line-height: 1.5;
+  display: block;
+  padding: 10px;
 }
 
-
-/* =====================================================
-   CODE SCROLLBAR
-====================================================== */
-
-.code-container pre::-webkit-scrollbar {
-
-    width: 6px;
-
-    height: 6px;
-
-}
-
-
-.code-container pre::-webkit-scrollbar-track {
-
-    background: #1e1e1e;
-
-}
-
-
-.code-container pre::-webkit-scrollbar-thumb {
-
-    background: #555555;
-
-    border-radius: 5px;
-
-}
-
-
-/* =====================================================
-   PDF HIDDEN CONTAINER
-====================================================== */
-
-#pdfContainer {
-
-    position: absolute;
-
-    left: -10000px;
-
-    top: 0;
-
-    width: 800px;
-
-    background: #ffffff;
-
-}
-
-
-/* =====================================================
-   PDF CARD
-====================================================== */
-
-.pdf-card {
-
-    background: #ffffff;
-
-    padding: 18px;
-
-    margin-bottom: 15px;
-
-    border: 1px solid #dddddd;
-
-    border-radius: 8px;
-
-    width: 800px;
-
-}
-
-
-/* =====================================================
-   PDF TITLE
-====================================================== */
-
-.pdf-title {
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-    color: #6c63ff;
-
-    margin-bottom: 10px;
-
-}
-
-
-/* =====================================================
-   PDF ANSWER
-====================================================== */
-
-.pdf-answer {
-
-    font-size: 13px;
-
-    line-height: 1.6;
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
-
-}
-
-
-/* =====================================================
-   PDF CODE
-====================================================== */
-
-.pdf-card .code-container pre {
-
-    max-height: none;
-
-    overflow: visible;
-
-}
-
-
-/* =====================================================
-   DOWNLOAD PROGRESS OVERLAY
-====================================================== */
+/* =========================================================
+   DOWNLOAD POPUP
+========================================================= */
 
 .download-overlay {
-
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.45);
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    z-index: 9999;
-
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
 }
-
-
-.download-overlay.show {
-
-    display: flex;
-
-}
-
-
-/* =====================================================
-   DOWNLOAD BOX
-====================================================== */
 
 .download-box {
-
-    width: 360px;
-
-    max-width: 90%;
-
-    background: #ffffff;
-
-    border-radius: 12px;
-
-    padding: 22px;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.25);
-
-    text-align: center;
-
+  width: 360px;
+  background: white;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
-
-
-/* =====================================================
-   DOWNLOAD TITLE
-====================================================== */
 
 .download-title {
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-    color: #333333;
-
-    margin-bottom: 5px;
-
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 7px;
 }
-
-
-/* =====================================================
-   DOWNLOAD FILE NAME
-====================================================== */
 
 .download-filename {
-
-    font-size: 11px;
-
-    color: #777777;
-
-    margin-bottom: 15px;
-
-    word-break: break-all;
-
+  font-size: 11px;
+  color: #6b7280;
+  word-break: break-all;
+  margin-bottom: 18px;
 }
-
-
-/* =====================================================
-   PROGRESS BAR
-====================================================== */
 
 .progress-track {
-
-    width: 100%;
-
-    height: 9px;
-
-    background: #eeeeee;
-
-    border-radius: 10px;
-
-    overflow: hidden;
-
+  height: 9px;
+  width: 100%;
+  background: #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
 }
-
-
-/* =====================================================
-   PROGRESS
-====================================================== */
 
 .progress-bar {
-
-    width: 0%;
-
-    height: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #6c63ff,
-            #8f88ff
-        );
-
-    border-radius: 10px;
-
-    transition:
-        width 0.2s ease;
-
+  height: 100%;
+  width: 0%;
+  background: #4f46e5;
+  transition: width 0.25s ease;
 }
-
-
-/* =====================================================
-   PROGRESS TEXT
-====================================================== */
 
 .progress-percent {
-
-    margin-top: 10px;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    color: #6c63ff;
-
+  margin-top: 9px;
+  font-size: 13px;
+  font-weight: 600;
 }
-
-
-/* =====================================================
-   PROGRESS STATUS
-====================================================== */
 
 .progress-status {
-
-    margin-top: 5px;
-
-    font-size: 11px;
-
-    color: #777777;
-
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 5px;
 }
 
+/* =========================================================
+   RESTART POPUP
+========================================================= */
 
-/* =====================================================
-   SUCCESS
-====================================================== */
-
-.download-success {
-
-    color: #28a745;
-
-    font-weight: 600;
-
+.restart-overlay,
+.history-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.48);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
 }
 
+.restart-box {
+  width: 380px;
+  max-width: 92%;
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+}
 
-/* =====================================================
+.restart-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.restart-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.restart-message {
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 12px 0 20px;
+}
+
+.restart-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.restart-cancel,
+.restart-confirm {
+  border: none;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.restart-cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.restart-confirm {
+  background: #dc2626;
+  color: white;
+}
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+.history-box {
+  width: 650px;
+  max-width: 94%;
+  max-height: 80vh;
+  overflow: hidden;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.history-title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.history-close {
+  border: none;
+  background: #f3f4f6;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+#historyList {
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.history-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 13px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+
+.history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.history-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.history-date {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 3px;
+}
+
+.history-count {
+  font-size: 11px;
+  color: #4f46e5;
+  margin-top: 5px;
+}
+
+.history-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.restore-btn,
+.history-delete-btn {
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  padding: 0 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.restore-btn {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.history-delete-btn {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.empty-history {
+  text-align: center;
+  padding: 35px 15px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* =========================================================
+   PDF
+========================================================= */
+
+#pdfContainer {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 800px;
+  background: white;
+}
+
+.pdf-card {
+  width: 760px;
+  padding: 35px;
+  background: white;
+  font-family: Arial, sans-serif;
+  color: #111827;
+}
+
+.pdf-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.pdf-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 25px;
+}
+
+.pdf-question {
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.pdf-answer {
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  margin-bottom: 18px;
+}
+
+.pdf-code-label {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.pdf-code {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  padding: 12px;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* =========================================================
    MOBILE
-====================================================== */
+========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 
-    body {
+  .container {
+    width: 96%;
+    padding: 15px;
+    margin: 12px auto;
+  }
 
-        padding: 10px;
+  .header {
+    align-items: flex-start;
+  }
 
-    }
+  .heading-input {
+    font-size: 18px;
+    height: 40px;
+  }
 
+  .history-btn {
+    height: 38px;
+    padding: 0 11px;
+  }
 
-    .card {
+  .upload-area {
+    flex-wrap: wrap;
+  }
 
-        padding: 11px;
+  .add-btn,
+  .submit-btn,
+  .restart-btn,
+  .download-btn,
+  .json-btn {
+    margin-bottom: 5px;
+  }
 
-    }
+  .history-box {
+    max-height: 90vh;
+  }
 
-
-    input,
-    textarea {
-
-        font-size: 12px;
-
-    }
-
-
-    .download-box {
-
-        width: 320px;
-
-    }
-
+  .history-item-header {
+    flex-direction: column;
+  }
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="container">
 
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
-<h2>Q&A Creator</h2>
+  <div class="header">
 
-
-<!-- =====================================================
-     UPLOAD JSON
-====================================================== -->
-
-<div class="upload-area">
-
-    <label
-        for="jsonUpload"
-        class="upload-btn"
-    >
-        ⬆ Upload JSON
-    </label>
-
+    <!-- EDITABLE HEADING -->
 
     <input
-        type="file"
-        id="jsonUpload"
-        accept=".json"
+      type="text"
+      id="headingName"
+      class="heading-input"
+      placeholder="Enter Q&A heading..."
+      value="Q&A Creator"
+      autocomplete="off"
     >
 
-</div>
+    <!-- HISTORY TOP RIGHT -->
+
+    <button
+      class="history-btn"
+      onclick="openHistory()"
+    >
+      🕘 History
+    </button>
+
+  </div>
 
 
-<!-- =====================================================
-     QUESTIONS
-====================================================== -->
+  <!-- =====================================================
+       UPLOAD
+  ====================================================== -->
 
-<div id="groups"></div>
+  <div class="upload-area">
+
+    <label
+      for="jsonUpload"
+      class="upload-btn"
+    >
+      ⬆ Upload JSON
+    </label>
+
+    <input
+      type="file"
+      id="jsonUpload"
+      accept=".json"
+    >
+
+  </div>
 
 
-<button
+  <!-- =====================================================
+       QUESTIONS
+  ====================================================== -->
+
+  <div id="groups"></div>
+
+
+  <button
     class="add-btn"
     onclick="addGroup()"
->
+  >
     + Add Question
-</button>
+  </button>
 
-
-<button
+  <button
     class="submit-btn"
     onclick="submitData()"
->
+  >
     Submit
-</button>
+  </button>
+
+  <button
+    class="restart-btn"
+    onclick="openRestartPopup()"
+  >
+    ↻ Clear / Restart
+  </button>
 
 
-<h2>Submitted Q&A</h2>
+  <!-- =====================================================
+       OUTPUT
+  ====================================================== -->
+
+  <h2 class="output-title">
+    Submitted Q&A
+  </h2>
+
+  <div id="output"></div>
 
 
-<div id="output"></div>
-
-
-<button
+  <button
     id="pdfButton"
     class="download-btn"
     onclick="downloadPDF()"
->
+  >
     Download PDF
-</button>
+  </button>
 
-
-<button
+  <button
     id="jsonButton"
     class="json-btn"
     onclick="downloadJSON()"
->
+  >
     Download JSON
-</button>
-
+  </button>
 
 </div>
 
 
-<!-- =====================================================
-     HIDDEN PDF AREA
-====================================================== -->
+<!-- =======================================================
+     PDF CONTAINER
+======================================================== -->
 
 <div id="pdfContainer"></div>
 
 
-<!-- =====================================================
-     DOWNLOAD PROGRESS
-====================================================== -->
+<!-- =======================================================
+     DOWNLOAD POPUP
+======================================================== -->
 
 <div
-    id="downloadOverlay"
-    class="download-overlay"
+  id="downloadOverlay"
+  class="download-overlay"
 >
 
-    <div class="download-box">
+  <div class="download-box">
 
-        <div
-            id="downloadTitle"
-            class="download-title"
-        >
-            Preparing download...
-        </div>
+    <div
+      id="downloadTitle"
+      class="download-title"
+    >
+      Preparing Download
+    </div>
 
+    <div
+      id="downloadFilename"
+      class="download-filename"
+    ></div>
 
-        <div
-            id="downloadFilename"
-            class="download-filename"
-        >
-        </div>
+    <div class="progress-track">
 
-
-        <div class="progress-track">
-
-            <div
-                id="progressBar"
-                class="progress-bar"
-            >
-            </div>
-
-        </div>
-
-
-        <div
-            id="progressPercent"
-            class="progress-percent"
-        >
-            0%
-        </div>
-
-
-        <div
-            id="progressStatus"
-            class="progress-status"
-        >
-            Preparing file...
-        </div>
+      <div
+        id="progressBar"
+        class="progress-bar"
+      ></div>
 
     </div>
+
+    <div
+      id="progressPercent"
+      class="progress-percent"
+    >
+      0%
+    </div>
+
+    <div
+      id="progressStatus"
+      class="progress-status"
+    >
+      Preparing...
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     RESTART POPUP
+======================================================== -->
+
+<div
+  id="restartOverlay"
+  class="restart-overlay"
+>
+
+  <div class="restart-box">
+
+    <div class="restart-icon">
+      ⚠️
+    </div>
+
+    <div class="restart-title">
+      Clear all data?
+    </div>
+
+    <div class="restart-message">
+
+      Your current Q&A will be saved
+      to History before the workspace
+      is cleared.
+
+      <br><br>
+
+      You can restore it later from
+      the History section.
+
+    </div>
+
+    <div class="restart-actions">
+
+      <button
+        class="restart-cancel"
+        onclick="closeRestartPopup()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="restart-confirm"
+        onclick="confirmRestart()"
+      >
+        Save to History & Clear
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     HISTORY POPUP
+======================================================== -->
+
+<div
+  id="historyOverlay"
+  class="history-overlay"
+>
+
+  <div class="history-box">
+
+    <div class="history-header">
+
+      <div class="history-title">
+        🕘 Q&A History
+      </div>
+
+      <button
+        class="history-close"
+        onclick="closeHistory()"
+      >
+        ✖
+      </button>
+
+    </div>
+
+    <div id="historyList"></div>
+
+  </div>
 
 </div>
 
 
 <script>
 
-/* =====================================================
+/* =========================================================
    GLOBAL VARIABLES
-====================================================== */
+========================================================= */
 
 let questionCount = 0;
 
 let finalData = [];
 
+const HISTORY_KEY = "qaHistory";
 
-/* =====================================================
-   LANGUAGE DETECTION
-====================================================== */
+const DRAFT_KEY = "qaDraft";
 
-function detectLanguage(
-    code,
-    requestedLanguage = ""
-) {
+const HEADING_KEY = "qaHeading";
 
-    const text =
-        String(code || "").trim();
 
+/* =========================================================
+   HEADING
+========================================================= */
 
-    const requested =
-        String(requestedLanguage || "")
-            .toLowerCase()
-            .trim();
+const headingInput =
+  document.getElementById("headingName");
 
 
-    /* Explicit language */
+headingInput.addEventListener(
+  "input",
+  function () {
 
-    if (requested) {
+    localStorage.setItem(
+      HEADING_KEY,
+      this.value.trim()
+    );
 
-        if (
-            requested === "playwright"
-        ) {
+    saveDraft();
 
-            return "Playwright";
+  }
+);
 
-        }
 
+/* =========================================================
+   GET HEADING
+========================================================= */
 
-        if (
-            requested === "javascript" ||
-            requested === "js"
-        ) {
+function getHeading() {
 
-            return "JavaScript";
+  const heading =
+    document
+      .getElementById("headingName")
+      .value
+      .trim();
 
-        }
 
-
-        if (
-            requested === "typescript" ||
-            requested === "ts"
-        ) {
-
-            return "TypeScript";
-
-        }
-
-
-        if (
-            requested === "python" ||
-            requested === "py"
-        ) {
-
-            return "Python";
-
-        }
-
-
-        if (
-            requested === "java"
-        ) {
-
-            return "Java";
-
-        }
-
-
-        if (
-            requested === "html"
-        ) {
-
-            return "HTML";
-
-        }
-
-
-        if (
-            requested === "css"
-        ) {
-
-            return "CSS";
-
-        }
-
-
-        if (
-            requested === "json"
-        ) {
-
-            return "JSON";
-
-        }
-
-
-        if (
-            requested === "sql"
-        ) {
-
-            return "SQL";
-
-        }
-
-    }
-
-
-    /* Playwright detection */
-
-    const playwrightPatterns = [
-
-        /\bpage\.(goto|click|fill|locator|reload|waitFor|screenshot|getBy)/i,
-
-        /\bpage\.getBy(Role|Text|Label|Placeholder|TestId)/i,
-
-        /\bgetByRole\s*\(/i,
-
-        /\bgetByText\s*\(/i,
-
-        /\bgetByLabel\s*\(/i,
-
-        /\bgetByPlaceholder\s*\(/i,
-
-        /\bgetByTestId\s*\(/i,
-
-        /\bexpect\s*\(/i,
-
-        /\btest\s*\(\s*['"`]/i,
-
-        /\bchromium\./i,
-
-        /\bfirefox\./i,
-
-        /\bwebkit\./i,
-
-        /\bbrowser\./i,
-
-        /\bplaywright\b/i,
-
-        /@playwright\/test/i
-
-    ];
-
-
-    if (
-        playwrightPatterns.some(
-            pattern =>
-                pattern.test(text)
-        )
-    ) {
-
-        return "Playwright";
-
-    }
-
-
-    /* TypeScript */
-
-    if (
-
-        /\binterface\s+\w+/i.test(text) ||
-
-        /\btype\s+\w+\s*=/i.test(text) ||
-
-        /\b(let|const|var)\s+\w+\s*:\s*(string|number|boolean)/i.test(text)
-
-    ) {
-
-        return "TypeScript";
-
-    }
-
-
-    /* Python */
-
-    if (
-
-        /\bdef\s+\w+\s*\(/i.test(text) ||
-
-        /\bimport\s+\w+/i.test(text) ||
-
-        /\bfrom\s+\w+\s+import\s+/i.test(text) ||
-
-        /\bprint\s*\(/i.test(text)
-
-    ) {
-
-        return "Python";
-
-    }
-
-
-    /* Java */
-
-    if (
-
-        /\bpublic\s+class\s+\w+/i.test(text) ||
-
-        /\bpublic\s+static\s+void\s+main/i.test(text)
-
-    ) {
-
-        return "Java";
-
-    }
-
-
-    /* HTML */
-
-    if (
-
-        /<!DOCTYPE\s+html>/i.test(text) ||
-
-        /<html[\s>]/i.test(text) ||
-
-        /<div[\s>]/i.test(text)
-
-    ) {
-
-        return "HTML";
-
-    }
-
-
-    /* CSS */
-
-    if (
-
-        /[.#]?[a-zA-Z0-9_-]+\s*\{[\s\S]*\}/.test(text) &&
-
-        /:\s*[^;]+;/.test(text)
-
-    ) {
-
-        return "CSS";
-
-    }
-
-
-    /* JSON */
-
-    if (
-
-        (
-            text.startsWith("{") &&
-            text.endsWith("}")
-        ) ||
-
-        (
-            text.startsWith("[") &&
-            text.endsWith("]")
-        )
-
-    ) {
-
-        try {
-
-            JSON.parse(text);
-
-            return "JSON";
-
-        }
-
-        catch {
-
-            // Not JSON
-
-        }
-
-    }
-
-
-    /* SQL */
-
-    if (
-
-        /\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP)\b/i.test(text)
-
-    ) {
-
-        return "SQL";
-
-    }
-
-
-    /* JavaScript */
-
-    if (
-
-        /\b(const|let|var)\s+\w+\s*=/i.test(text) ||
-
-        /\bconsole\.log\s*\(/i.test(text) ||
-
-        /=>/.test(text) ||
-
-        /\basync\s+function\b/i.test(text) ||
-
-        /\bawait\s+/i.test(text)
-
-    ) {
-
-        return "JavaScript";
-
-    }
-
-
-    return "Code";
+  return heading || "Q&A Creator";
 
 }
 
 
-/* =====================================================
-   HIGHLIGHT.JS LANGUAGE
-====================================================== */
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
 
-function getHighlightLanguage(
-    label
-) {
+function escapeHtml(value) {
 
-    const map = {
-
-        "Playwright":
-            "javascript",
-
-        "JavaScript":
-            "javascript",
-
-        "TypeScript":
-            "typescript",
-
-        "Python":
-            "python",
-
-        "Java":
-            "java",
-
-        "HTML":
-            "xml",
-
-        "CSS":
-            "css",
-
-        "JSON":
-            "json",
-
-        "SQL":
-            "sql"
-
-    };
-
-
-    return (
-        map[label] ||
-        "plaintext"
-    );
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
 }
 
 
-/* =====================================================
-   CREATE CODE BLOCK
-====================================================== */
+/* =========================================================
+   ATTRIBUTE ESCAPE
+========================================================= */
 
-function createCodeBlock(
-    codeText,
-    requestedLanguage = ""
-) {
+function escapeAttribute(value) {
 
-    const codeContainer =
-        document.createElement("div");
-
-
-    codeContainer.className =
-        "code-container";
-
-
-    const language =
-        detectLanguage(
-            codeText,
-            requestedLanguage
-        );
-
-
-    /* Header */
-
-    const codeHeader =
-        document.createElement("div");
-
-
-    codeHeader.className =
-        "code-header";
-
-
-    const codeIcon =
-        document.createElement("span");
-
-
-    codeIcon.className =
-        "code-icon";
-
-
-    codeIcon.textContent =
-        "</>";
-
-
-    const codeLanguage =
-        document.createElement("span");
-
-
-    codeLanguage.className =
-        "code-language";
-
-
-    codeLanguage.textContent =
-        language;
-
-
-    codeHeader.appendChild(
-        codeIcon
-    );
-
-
-    codeHeader.appendChild(
-        codeLanguage
-    );
-
-
-    /* Code */
-
-    const pre =
-        document.createElement("pre");
-
-
-    const code =
-        document.createElement("code");
-
-
-    const highlightLanguage =
-        getHighlightLanguage(
-            language
-        );
-
-
-    code.className =
-        `language-${highlightLanguage}`;
-
-
-    code.textContent =
-        codeText;
-
-
-    pre.appendChild(
-        code
-    );
-
-
-    codeContainer.appendChild(
-        codeHeader
-    );
-
-
-    codeContainer.appendChild(
-        pre
-    );
-
-
-    if (
-        highlightLanguage !==
-        "plaintext"
-    ) {
-
-        hljs.highlightElement(
-            code
-        );
-
-    }
-
-
-    return codeContainer;
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
 }
 
 
-/* =====================================================
-   GENERATE FILE NAME
-====================================================== */
+/* =========================================================
+   TIMESTAMP
+========================================================= */
 
 function getTimestamp() {
 
-    const now =
-        new Date();
+  const now = new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(now.getMonth() + 1)
+      .padStart(2, "0");
+
+  const day =
+    String(now.getDate())
+      .padStart(2, "0");
+
+  const hours =
+    String(now.getHours())
+      .padStart(2, "0");
+
+  const minutes =
+    String(now.getMinutes())
+      .padStart(2, "0");
+
+  const seconds =
+    String(now.getSeconds())
+      .padStart(2, "0");
+
+  return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+
+}
 
 
-    const year =
-        now.getFullYear();
+/* =========================================================
+   LANGUAGE DETECTION
+========================================================= */
+
+function detectLanguage(
+  code,
+  requestedLanguage = ""
+) {
+
+  const text =
+    String(code || "").trim();
+
+  const requested =
+    String(requestedLanguage || "")
+      .trim()
+      .toLowerCase();
 
 
-    const month =
-        String(
-            now.getMonth() + 1
-        ).padStart(2, "0");
+  if (!text) {
+    return "Code";
+  }
 
 
-    const day =
-        String(
-            now.getDate()
-        ).padStart(2, "0");
+  if (
+    requested === "javascript" ||
+    requested === "js"
+  ) {
+    return "JavaScript";
+  }
 
 
-    const hours =
-        String(
-            now.getHours()
-        ).padStart(2, "0");
+  if (
+    requested === "typescript" ||
+    requested === "ts"
+  ) {
+    return "TypeScript";
+  }
 
 
-    const minutes =
-        String(
-            now.getMinutes()
-        ).padStart(2, "0");
+  if (
+    requested === "python" ||
+    requested === "py"
+  ) {
+    return "Python";
+  }
 
 
-    const seconds =
-        String(
-            now.getSeconds()
-        ).padStart(2, "0");
+  if (requested === "java") {
+    return "Java";
+  }
 
 
-    return (
-        `${year}-${month}-${day}_` +
-        `${hours}-${minutes}-${seconds}`
+  if (requested === "html") {
+    return "HTML";
+  }
+
+
+  if (requested === "css") {
+    return "CSS";
+  }
+
+
+  if (requested === "json") {
+    return "JSON";
+  }
+
+
+  if (requested === "sql") {
+    return "SQL";
+  }
+
+
+  /* Playwright */
+
+  if (
+    /page\.(goto|click|fill|locator|waitFor|screenshot|title|url|reload)/i.test(text) ||
+    /page\.getBy(Role|Text|Label|Placeholder|TestId)/i.test(text) ||
+    /getByRole|getByText|getByLabel|getByPlaceholder|getByTestId/i.test(text) ||
+    /\bexpect\s*\(/i.test(text) ||
+    /\btest\s*\(/i.test(text) ||
+    /@playwright\/test/i.test(text) ||
+    /\b(playwright|chromium|firefox|webkit|browser)\b/i.test(text)
+  ) {
+    return "Playwright";
+  }
+
+
+  /* TypeScript */
+
+  if (
+    /\b(interface|type)\s+\w+/i.test(text) ||
+    /:\s*(string|number|boolean|any|unknown)\b/.test(text)
+  ) {
+    return "TypeScript";
+  }
+
+
+  /* Python */
+
+  if (
+    /\bdef\s+\w+\s*\(/.test(text) ||
+    /\bfrom\s+\w+\s+import\b/.test(text) ||
+    /\bprint\s*\(/.test(text)
+  ) {
+    return "Python";
+  }
+
+
+  /* Java */
+
+  if (
+    /\bpublic\s+(class|static|void)\b/.test(text) ||
+    /\bSystem\.out\.println\b/.test(text)
+  ) {
+    return "Java";
+  }
+
+
+  /* HTML */
+
+  if (
+    /<!DOCTYPE\s+html>/i.test(text) ||
+    /<html[\s>]/i.test(text) ||
+    /<body[\s>]/i.test(text) ||
+    /<div[\s>]/i.test(text)
+  ) {
+    return "HTML";
+  }
+
+
+  /* CSS */
+
+  if (
+    /[.#][\w-]+\s*\{[\s\S]*?:/.test(text)
+  ) {
+    return "CSS";
+  }
+
+
+  /* JSON */
+
+  if (
+    (text.startsWith("{") && text.endsWith("}")) ||
+    (text.startsWith("[") && text.endsWith("]"))
+  ) {
+
+    try {
+
+      JSON.parse(text);
+
+      return "JSON";
+
+    } catch {}
+
+  }
+
+
+  /* SQL */
+
+  if (
+    /\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP)\b/i.test(text)
+  ) {
+    return "SQL";
+  }
+
+
+  /* JavaScript */
+
+  if (
+    /\b(const|let|var|function)\b/.test(text) ||
+    /=>/.test(text) ||
+    /console\.log/.test(text)
+  ) {
+    return "JavaScript";
+  }
+
+
+  return "Code";
+
+}
+
+
+/* =========================================================
+   HIGHLIGHT LANGUAGE
+========================================================= */
+
+function getHighlightLanguage(label) {
+
+  const map = {
+
+    Playwright: "javascript",
+
+    JavaScript: "javascript",
+
+    TypeScript: "typescript",
+
+    Python: "python",
+
+    Java: "java",
+
+    HTML: "xml",
+
+    CSS: "css",
+
+    JSON: "json",
+
+    SQL: "sql",
+
+    Code: "plaintext"
+
+  };
+
+  return map[label] || "plaintext";
+
+}
+
+
+/* =========================================================
+   CREATE CODE BLOCK
+========================================================= */
+
+function createCodeBlock(
+  codeText,
+  requestedLanguage = ""
+) {
+
+  const container =
+    document.createElement("div");
+
+  container.className =
+    "code-container";
+
+
+  const detectedLanguage =
+    detectLanguage(
+      codeText,
+      requestedLanguage
     );
 
-}
+
+  const header =
+    document.createElement("div");
+
+  header.className =
+    "code-header";
+
+  header.textContent =
+    `</> ${detectedLanguage}`;
 
 
-/* =====================================================
-   DOWNLOAD PROGRESS FUNCTIONS
-====================================================== */
-
-function showDownloadProgress(
-    title,
-    filename
-) {
-
-    const overlay =
-        document.getElementById(
-            "downloadOverlay"
-        );
+  const pre =
+    document.createElement("pre");
 
 
-    const titleElement =
-        document.getElementById(
-            "downloadTitle"
-        );
+  const code =
+    document.createElement("code");
 
 
-    const filenameElement =
-        document.getElementById(
-            "downloadFilename"
-        );
+  code.textContent =
+    codeText;
 
 
-    const progressBar =
-        document.getElementById(
-            "progressBar"
-        );
-
-
-    const progressPercent =
-        document.getElementById(
-            "progressPercent"
-        );
-
-
-    const progressStatus =
-        document.getElementById(
-            "progressStatus"
-        );
-
-
-    titleElement.textContent =
-        title;
-
-
-    filenameElement.textContent =
-        filename;
-
-
-    progressBar.style.width =
-        "0%";
-
-
-    progressPercent.textContent =
-        "0%";
-
-
-    progressStatus.textContent =
-        "Preparing file...";
-
-
-    progressStatus.className =
-        "progress-status";
-
-
-    overlay.classList.add(
-        "show"
+  const highlightLanguage =
+    getHighlightLanguage(
+      detectedLanguage
     );
 
-}
+
+  code.className =
+    `language-${highlightLanguage}`;
 
 
-/* =====================================================
-   UPDATE PROGRESS
-====================================================== */
+  pre.appendChild(code);
 
-function updateDownloadProgress(
-    percent,
-    status
-) {
+  container.appendChild(header);
 
-    const progressBar =
-        document.getElementById(
-            "progressBar"
-        );
+  container.appendChild(pre);
 
 
-    const progressPercent =
-        document.getElementById(
-            "progressPercent"
-        );
+  if (
+    highlightLanguage !== "plaintext" &&
+    typeof hljs !== "undefined"
+  ) {
+
+    hljs.highlightElement(code);
+
+  }
 
 
-    const progressStatus =
-        document.getElementById(
-            "progressStatus"
-        );
-
-
-    const safePercent =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                Math.round(percent)
-            )
-        );
-
-
-    progressBar.style.width =
-        safePercent + "%";
-
-
-    progressPercent.textContent =
-        safePercent + "%";
-
-
-    if (status) {
-
-        progressStatus.textContent =
-            status;
-
-    }
+  return container;
 
 }
 
 
-/* =====================================================
-   HIDE DOWNLOAD PROGRESS
-====================================================== */
-
-function hideDownloadProgress(
-    success = false
-) {
-
-    const overlay =
-        document.getElementById(
-            "downloadOverlay"
-        );
-
-
-    const progressStatus =
-        document.getElementById(
-            "progressStatus"
-        );
-
-
-    if (success) {
-
-        progressStatus.textContent =
-            "Download started successfully.";
-
-
-        progressStatus.className =
-            "progress-status download-success";
-
-
-        setTimeout(
-            () => {
-
-                overlay.classList.remove(
-                    "show"
-                );
-
-            },
-            1200
-        );
-
-    }
-
-    else {
-
-        overlay.classList.remove(
-            "show"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   ENABLE / DISABLE DOWNLOAD BUTTONS
-====================================================== */
-
-function setDownloadButtons(
-    disabled
-) {
-
-    document
-        .getElementById("pdfButton")
-        .disabled =
-        disabled;
-
-
-    document
-        .getElementById("jsonButton")
-        .disabled =
-        disabled;
-
-}
-
-
-/* =====================================================
+/* =========================================================
    SAVE DRAFT
-====================================================== */
+========================================================= */
 
 function saveDraft() {
 
-    const cards =
-        document.querySelectorAll(
-            "#groups .card"
-        );
+  const cards =
+    document.querySelectorAll(
+      ".qa-card"
+    );
 
 
-    const draft = [];
+  const data = [];
 
 
-    cards.forEach(card => {
+  cards.forEach(card => {
 
-        const inputs =
-            card.querySelectorAll(
-                "input, textarea"
-            );
+    const question =
+      card
+        .querySelector(".question-input")
+        .value
+        .trim();
 
 
-        draft.push({
+    const answer =
+      card
+        .querySelector(".answer-input")
+        .value
+        .trim();
 
-            question:
-                inputs[0].value,
 
-            answer:
-                inputs[1].value,
+    const code =
+      card
+        .querySelector(".code-input")
+        .value
+        .trim();
 
-            code:
-                inputs[2].value
 
-        });
+    data.push({
+      question,
+      answer,
+      code
+    });
+
+  });
+
+
+  const draft = {
+
+    heading:
+      getHeading(),
+
+    data
+
+  };
+
+
+  localStorage.setItem(
+    DRAFT_KEY,
+    JSON.stringify(draft)
+  );
+
+}
+
+
+/* =========================================================
+   ADD QUESTION
+========================================================= */
+
+function addGroup(data = {}) {
+
+  questionCount++;
+
+
+  const groups =
+    document.getElementById(
+      "groups"
+    );
+
+
+  const card =
+    document.createElement("div");
+
+  card.className =
+    "qa-card";
+
+
+  card.innerHTML = `
+
+    <div class="qa-card-header">
+
+      <div class="qa-title">
+        Question ${questionCount}
+      </div>
+
+      <button
+        class="delete-btn"
+        title="Delete Question"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <input
+      type="text"
+      class="question-input"
+      placeholder="Enter your question"
+      value="${escapeAttribute(
+        data.question || ""
+      )}"
+    >
+
+    <textarea
+      class="answer-input"
+      placeholder="Enter answer"
+    >${escapeHtml(
+      data.answer || ""
+    )}</textarea>
+
+    <textarea
+      class="code-input"
+      placeholder="Enter example code (optional)"
+    >${escapeHtml(
+      data.code || ""
+    )}</textarea>
+
+  `;
+
+
+  groups.appendChild(card);
+
+
+  card
+    .querySelector(".delete-btn")
+    .addEventListener(
+      "click",
+      function () {
+
+        card.remove();
+
+        updateTitles();
+
+        saveDraft();
+
+      }
+    );
+
+
+  card
+    .querySelectorAll(
+      "input, textarea"
+    )
+    .forEach(element => {
+
+      element.addEventListener(
+        "input",
+        saveDraft
+      );
 
     });
 
 
-    localStorage.setItem(
-        "qaDraft",
-        JSON.stringify(draft)
-    );
+  saveDraft();
 
 }
 
 
-/* =====================================================
-   ADD QUESTION
-====================================================== */
+/* =========================================================
+   UPDATE TITLES
+========================================================= */
 
-function addGroup(
-    data = {}
-) {
+function updateTitles() {
 
-    questionCount++;
-
-
-    const group =
-        document.createElement(
-            "div"
-        );
+  const cards =
+    document.querySelectorAll(
+      ".qa-card"
+    );
 
 
-    group.className =
-        "card";
+  cards.forEach(
+    (card, index) => {
+
+      card.querySelector(
+        ".qa-title"
+      ).textContent =
+        `Question ${index + 1}`;
+
+    }
+  );
 
 
-    group.innerHTML = `
+  questionCount =
+    cards.length;
 
-        <button
-            class="cancel-btn"
-            title="Delete Question"
-        >
-            ✖
-        </button>
-
-        <div class="title">
-            Question ${questionCount}
-        </div>
-
-        <input
-            type="text"
-            placeholder="Enter Question"
-        >
-
-        <textarea
-            placeholder="Enter Answer"
-        ></textarea>
-
-        <textarea
-            placeholder="Enter Example Code"
-        ></textarea>
-
-    `;
+}
 
 
-    const inputs =
-        group.querySelectorAll(
-            "input, textarea"
-        );
+/* =========================================================
+   JSON UPLOAD
+========================================================= */
+
+document
+  .getElementById("jsonUpload")
+  .addEventListener(
+    "change",
+    function(event) {
+
+      const file =
+        event.target.files[0];
 
 
-    inputs[0].value =
-        data.question || "";
+      if (!file) {
+        return;
+      }
 
 
-    inputs[1].value =
-        data.answer || "";
+      const reader =
+        new FileReader();
 
 
-    inputs[2].value =
-        data.code || "";
+      reader.onload =
+        function(e) {
+
+          try {
+
+            const parsed =
+              JSON.parse(
+                e.target.result
+              );
 
 
-    group
-        .querySelector(".cancel-btn")
-        .onclick =
-        function () {
+            let importedData =
+              parsed;
 
-            group.remove();
 
-            updateTitles();
+            /*
+              Supports:
+
+              [
+                {...}
+              ]
+
+              OR
+
+              {
+                heading: "...",
+                data: [...]
+              }
+            */
+
+
+            if (
+              !Array.isArray(parsed) &&
+              Array.isArray(parsed.data)
+            ) {
+
+              importedData =
+                parsed.data;
+
+
+              if (parsed.heading) {
+
+                document.getElementById(
+                  "headingName"
+                ).value =
+                  parsed.heading;
+
+              }
+
+            }
+
+
+            if (
+              !Array.isArray(
+                importedData
+              )
+            ) {
+
+              alert(
+                "Invalid JSON format."
+              );
+
+              return;
+
+            }
+
+
+            document.getElementById(
+              "groups"
+            ).innerHTML = "";
+
+
+            questionCount = 0;
+
+
+            importedData.forEach(
+              item =>
+                addGroup(item)
+            );
+
 
             saveDraft();
+
+
+            alert(
+              `${importedData.length} question(s) imported successfully.`
+            );
+
+
+          } catch(error) {
+
+            console.error(error);
+
+            alert(
+              "Unable to read the JSON file.\n\nPlease check the JSON format."
+            );
+
+          }
 
         };
 
 
-    group
-        .querySelectorAll(
-            "input, textarea"
-        )
-        .forEach(
-            element => {
+      reader.readAsText(file);
 
-                element.addEventListener(
-                    "input",
-                    saveDraft
-                );
-
-            }
-        );
+    }
+  );
 
 
-    document
-        .getElementById("groups")
-        .appendChild(group);
-
-}
-
-
-/* =====================================================
-   UPDATE TITLES
-====================================================== */
-
-function updateTitles() {
-
-    const cards =
-        document.querySelectorAll(
-            "#groups .card"
-        );
-
-
-    questionCount = 0;
-
-
-    cards.forEach(card => {
-
-        questionCount++;
-
-
-        card
-            .querySelector(".title")
-            .textContent =
-            "Question " +
-            questionCount;
-
-    });
-
-}
-
-
-/* =====================================================
-   JSON UPLOAD
-====================================================== */
-
-document
-    .getElementById("jsonUpload")
-    .addEventListener(
-        "change",
-        function (event) {
-
-            const file =
-                event.target.files[0];
-
-
-            if (!file) {
-
-                return;
-
-            }
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function (e) {
-
-                    try {
-
-                        const data =
-                            JSON.parse(
-                                e.target.result
-                            );
-
-
-                        if (
-                            !Array.isArray(data)
-                        ) {
-
-                            alert(
-                                "Invalid JSON format.\n\n" +
-                                "Expected a JSON array."
-                            );
-
-                            return;
-
-                        }
-
-
-                        document
-                            .getElementById(
-                                "groups"
-                            )
-                            .innerHTML =
-                            "";
-
-
-                        questionCount =
-                            0;
-
-
-                        data.forEach(
-                            item => {
-
-                                addGroup({
-
-                                    question:
-                                        item.question || "",
-
-                                    answer:
-                                        item.answer || "",
-
-                                    code:
-                                        item.code || ""
-
-                                });
-
-                            }
-                        );
-
-
-                        saveDraft();
-
-                    }
-
-                    catch (error) {
-
-                        alert(
-                            "Invalid JSON file.\n\n" +
-                            "Please check the JSON format."
-                        );
-
-
-                        console.error(
-                            error
-                        );
-
-                    }
-
-                };
-
-
-            reader.readAsText(file);
-
-        }
-    );
-
-
-/* =====================================================
-   SUBMIT DATA
-====================================================== */
+/* =========================================================
+   SUBMIT
+========================================================= */
 
 function submitData() {
 
-    const cards =
-        document.querySelectorAll(
-            "#groups .card"
-        );
-
-
-    finalData = [];
-
-
-    cards.forEach(
-        card => {
-
-            const inputs =
-                card.querySelectorAll(
-                    "input, textarea"
-                );
-
-
-            const question =
-                inputs[0].value.trim();
-
-
-            const answer =
-                inputs[1].value.trim();
-
-
-            const code =
-                inputs[2].value.trim();
-
-
-            if (
-                question !== ""
-            ) {
-
-                const obj = {
-
-                    number:
-                        finalData.length + 1,
-
-                    question:
-                        question,
-
-                    answer:
-                        answer
-
-                };
-
-
-                if (
-                    code !== ""
-                ) {
-
-                    obj.code =
-                        code;
-
-                }
-
-
-                finalData.push(
-                    obj
-                );
-
-            }
-
-        }
+  const cards =
+    document.querySelectorAll(
+      ".qa-card"
     );
 
 
-    if (
-        finalData.length === 0
-    ) {
+  finalData = [];
 
-        alert(
-            "Please enter at least one question."
-        );
 
-        return;
+  cards.forEach(card => {
+
+    const question =
+      card
+        .querySelector(".question-input")
+        .value
+        .trim();
+
+
+    const answer =
+      card
+        .querySelector(".answer-input")
+        .value
+        .trim();
+
+
+    const code =
+      card
+        .querySelector(".code-input")
+        .value
+        .trim();
+
+
+    if (!question) {
+      return;
+    }
+
+
+    const item = {
+
+      question,
+
+      answer
+
+    };
+
+
+    if (code) {
+
+      item.code =
+        code;
 
     }
 
 
-    displayResults();
+    finalData.push(item);
+
+  });
+
+
+  if (!finalData.length) {
+
+    alert(
+      "Please enter at least one question before submitting."
+    );
+
+    return;
+
+  }
+
+
+  displayResults();
 
 }
 
 
-/* =====================================================
+/* =========================================================
    DISPLAY RESULTS
-====================================================== */
+========================================================= */
 
 function displayResults() {
 
-    const output =
-        document.getElementById(
-            "output"
+  const output =
+    document.getElementById(
+      "output"
+    );
+
+
+  output.innerHTML = "";
+
+
+  const heading =
+    document.createElement("div");
+
+  heading.style.fontSize =
+    "18px";
+
+  heading.style.fontWeight =
+    "600";
+
+  heading.style.marginBottom =
+    "15px";
+
+  heading.style.color =
+    "#111827";
+
+  heading.textContent =
+    getHeading();
+
+
+  output.appendChild(
+    heading
+  );
+
+
+  finalData.forEach(
+    (item, index) => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "result-card";
+
+
+      const question =
+        document.createElement("div");
+
+      question.className =
+        "result-question";
+
+      question.textContent =
+        `${index + 1}. ${item.question}`;
+
+
+      const answer =
+        document.createElement("div");
+
+      answer.className =
+        "result-answer";
+
+      answer.textContent =
+        item.answer ||
+        "No answer provided.";
+
+
+      card.appendChild(
+        question
+      );
+
+      card.appendChild(
+        answer
+      );
+
+
+      if (item.code) {
+
+        card.appendChild(
+          createCodeBlock(
+            item.code
+          )
         );
 
-
-    output.innerHTML =
-        "";
+      }
 
 
-    finalData.forEach(
-        item => {
+      output.appendChild(
+        card
+      );
 
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "card";
-
-
-            /* Question */
-
-            const title =
-                document.createElement(
-                    "div"
-                );
-
-
-            title.className =
-                "title";
-
-
-            title.textContent =
-                item.number +
-                ". " +
-                item.question;
-
-
-            card.appendChild(
-                title
-            );
-
-
-            /* Answer */
-
-            const answer =
-                document.createElement(
-                    "div"
-                );
-
-
-            answer.className =
-                "answer-text";
-
-
-            answer.textContent =
-                item.answer;
-
-
-            card.appendChild(
-                answer
-            );
-
-
-            /* Code */
-
-            if (
-                item.code
-            ) {
-
-                const codeBlock =
-                    createCodeBlock(
-                        item.code
-                    );
-
-
-                card.appendChild(
-                    codeBlock
-                );
-
-            }
-
-
-            output.appendChild(
-                card
-            );
-
-        }
-    );
+    }
+  );
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function getHistory() {
+
+  try {
+
+    const history =
+      localStorage.getItem(
+        HISTORY_KEY
+      );
+
+
+    if (!history) {
+      return [];
+    }
+
+
+    const parsed =
+      JSON.parse(history);
+
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE CURRENT TO HISTORY
+========================================================= */
+
+function saveCurrentToHistory() {
+
+  const cards =
+    document.querySelectorAll(
+      ".qa-card"
+    );
+
+
+  const data = [];
+
+
+  cards.forEach(card => {
+
+    const question =
+      card
+        .querySelector(".question-input")
+        .value
+        .trim();
+
+
+    const answer =
+      card
+        .querySelector(".answer-input")
+        .value
+        .trim();
+
+
+    const code =
+      card
+        .querySelector(".code-input")
+        .value
+        .trim();
+
+
+    if (question) {
+
+      const item = {
+
+        question,
+
+        answer
+
+      };
+
+
+      if (code) {
+
+        item.code =
+          code;
+
+      }
+
+
+      data.push(item);
+
+    }
+
+  });
+
+
+  if (!data.length) {
+
+    return false;
+
+  }
+
+
+  const history =
+    getHistory();
+
+
+  const session = {
+
+    id:
+      Date.now(),
+
+    date:
+      new Date().toISOString(),
+
+    heading:
+      getHeading(),
+
+    questionCount:
+      data.length,
+
+    data
+
+  };
+
+
+  history.unshift(
+    session
+  );
+
+
+  localStorage.setItem(
+    HISTORY_KEY,
+    JSON.stringify(
+      history.slice(0, 20)
+    )
+  );
+
+
+  return true;
+
+}
+
+
+/* =========================================================
+   FORMAT DATE
+========================================================= */
+
+function formatHistoryDate(
+  dateString
+) {
+
+  try {
+
+    return new Date(
+      dateString
+    ).toLocaleString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+  } catch {
+
+    return dateString;
+
+  }
+
+}
+
+
+/* =========================================================
+   OPEN HISTORY
+========================================================= */
+
+function openHistory() {
+
+  renderHistory();
+
+
+  document.getElementById(
+    "historyOverlay"
+  ).style.display =
+    "flex";
+
+}
+
+
+/* =========================================================
+   CLOSE HISTORY
+========================================================= */
+
+function closeHistory() {
+
+  document.getElementById(
+    "historyOverlay"
+  ).style.display =
+    "none";
+
+}
+
+
+/* =========================================================
+   RENDER HISTORY
+========================================================= */
+
+function renderHistory() {
+
+  const history =
+    getHistory();
+
+
+  const list =
+    document.getElementById(
+      "historyList"
+    );
+
+
+  list.innerHTML = "";
+
+
+  if (!history.length) {
+
+    list.innerHTML = `
+
+      <div class="empty-history">
+
+        No Q&A history available.
+
+        <br><br>
+
+        Previous sessions will appear
+        here when you use
+        Clear / Restart.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  history.forEach(
+    (session, index) => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+
+      item.className =
+        "history-item";
+
+
+      item.innerHTML = `
+
+        <div class="history-item-header">
+
+          <div>
+
+            <div class="history-name">
+
+              ${escapeHtml(
+                session.heading ||
+                "Q&A Creator"
+              )}
+
+            </div>
+
+            <div class="history-date">
+
+              ${escapeHtml(
+                formatHistoryDate(
+                  session.date
+                )
+              )}
+
+            </div>
+
+            <div class="history-count">
+
+              ${session.questionCount || 0}
+              Question(s)
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="history-actions">
+
+          <button
+            class="restore-btn"
+            onclick="restoreHistory(${session.id})"
+          >
+            ↻ Restore
+          </button>
+
+          <button
+            class="history-delete-btn"
+            onclick="deleteHistory(${session.id})"
+          >
+            🗑 Delete
+          </button>
+
+        </div>
+
+      `;
+
+
+      list.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RESTORE HISTORY
+========================================================= */
+
+function restoreHistory(
+  historyId
+) {
+
+  const history =
+    getHistory();
+
+
+  const session =
+    history.find(
+      item =>
+        item.id === historyId
+    );
+
+
+  if (!session) {
+
+    alert(
+      "History session not found."
+    );
+
+    return;
+
+  }
+
+
+  const confirmed =
+    confirm(
+      "Restore this Q&A session?\n\nYour current workspace will be replaced."
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  document.getElementById(
+    "groups"
+  ).innerHTML = "";
+
+
+  questionCount = 0;
+
+
+  /* Restore heading */
+
+  document.getElementById(
+    "headingName"
+  ).value =
+    session.heading ||
+    "Q&A Creator";
+
+
+  /* Restore questions */
+
+  session.data.forEach(
+    item =>
+      addGroup(item)
+  );
+
+
+  finalData = [];
+
+
+  document.getElementById(
+    "output"
+  ).innerHTML = "";
+
+
+  saveDraft();
+
+
+  closeHistory();
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+
+  alert(
+    "Q&A session restored successfully."
+  );
+
+}
+
+
+/* =========================================================
+   DELETE HISTORY
+========================================================= */
+
+function deleteHistory(
+  historyId
+) {
+
+  const confirmed =
+    confirm(
+      "Delete this history session?\n\nThis action cannot be undone."
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  const history =
+    getHistory().filter(
+      item =>
+        item.id !== historyId
+    );
+
+
+  localStorage.setItem(
+    HISTORY_KEY,
+    JSON.stringify(history)
+  );
+
+
+  renderHistory();
+
+}
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+function openRestartPopup() {
+
+  document.getElementById(
+    "restartOverlay"
+  ).style.display =
+    "flex";
+
+}
+
+
+function closeRestartPopup() {
+
+  document.getElementById(
+    "restartOverlay"
+  ).style.display =
+    "none";
+
+}
+
+
+function confirmRestart() {
+
+  const savedToHistory =
+    saveCurrentToHistory();
+
+
+  localStorage.removeItem(
+    DRAFT_KEY
+  );
+
+
+  document.getElementById(
+    "groups"
+  ).innerHTML = "";
+
+
+  document.getElementById(
+    "output"
+  ).innerHTML = "";
+
+
+  questionCount = 0;
+
+  finalData = [];
+
+
+  document.getElementById(
+    "jsonUpload"
+  ).value = "";
+
+
+  /*
+    Keep the current heading.
+    Only Q&A content is cleared.
+  */
+
+  addGroup();
+
+
+  closeRestartPopup();
+
+
+  if (savedToHistory) {
+
+    alert(
+      "Current Q&A has been saved to History.\n\nA fresh Q&A session has been started."
+    );
+
+  } else {
+
+    alert(
+      "Workspace cleared.\n\nA fresh Q&A session has been started."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DOWNLOAD PROGRESS
+========================================================= */
+
+function showDownloadProgress(
+  title,
+  filename
+) {
+
+  document.getElementById(
+    "downloadTitle"
+  ).textContent =
+    title;
+
+
+  document.getElementById(
+    "downloadFilename"
+  ).textContent =
+    filename;
+
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    "0%";
+
+
+  document.getElementById(
+    "progressPercent"
+  ).textContent =
+    "0%";
+
+
+  document.getElementById(
+    "progressStatus"
+  ).textContent =
+    "Preparing...";
+
+
+  document.getElementById(
+    "downloadOverlay"
+  ).style.display =
+    "flex";
+
+}
+
+
+function updateDownloadProgress(
+  percent,
+  status
+) {
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    `${percent}%`;
+
+
+  document.getElementById(
+    "progressPercent"
+  ).textContent =
+    `${percent}%`;
+
+
+  document.getElementById(
+    "progressStatus"
+  ).textContent =
+    status;
+
+}
+
+
+function hideDownloadProgress(
+  success = false
+) {
+
+  if (success) {
+
+    updateDownloadProgress(
+      100,
+      "Download completed successfully."
+    );
+
+  }
+
+
+  setTimeout(
+    () => {
+
+      document.getElementById(
+        "downloadOverlay"
+      ).style.display =
+        "none";
+
+    },
+    success ? 700 : 0
+  );
+
+}
+
+
+function setDownloadButtons(
+  disabled
+) {
+
+  document.getElementById(
+    "pdfButton"
+  ).disabled =
+    disabled;
+
+
+  document.getElementById(
+    "jsonButton"
+  ).disabled =
+    disabled;
+
+}
+
+
+/* =========================================================
    DOWNLOAD JSON
-====================================================== */
+========================================================= */
 
 async function downloadJSON() {
 
-    if (
-        finalData.length === 0
-    ) {
+  if (!finalData.length) {
 
-        alert(
-            "Please submit the Q&A before downloading JSON."
-        );
-
-        return;
-
-    }
-
-
-    const filename =
-        "QA_Data_" +
-        getTimestamp() +
-        ".json";
-
-
-    showDownloadProgress(
-        "Preparing JSON...",
-        filename
+    alert(
+      "Please click Submit before downloading JSON."
     );
 
+    return;
+
+  }
+
+
+  const timestamp =
+    getTimestamp();
+
+
+  /*
+    Filename remains unchanged.
+  */
+
+  const filename =
+    `QA_Data_${timestamp}.json`;
+
+
+  showDownloadProgress(
+    "Preparing JSON",
+    filename
+  );
+
+
+  setDownloadButtons(true);
+
+
+  try {
+
+    updateDownloadProgress(
+      20,
+      "Preparing Q&A data..."
+    );
+
+
+    await delay(250);
+
+
+    const exportData = {
+
+      heading:
+        getHeading(),
+
+      exportedAt:
+        new Date().toISOString(),
+
+      totalQuestions:
+        finalData.length,
+
+      data:
+        finalData
+
+    };
+
+
+    updateDownloadProgress(
+      50,
+      "Creating JSON file..."
+    );
+
+
+    await delay(250);
+
+
+    const blob =
+      new Blob(
+        [
+          JSON.stringify(
+            exportData,
+            null,
+            2
+          )
+        ],
+        {
+          type:
+            "application/json"
+        }
+      );
+
+
+    updateDownloadProgress(
+      80,
+      "Starting download..."
+    );
+
+
+    await delay(250);
+
+
+    const url =
+      URL.createObjectURL(blob);
+
+
+    const link =
+      document.createElement("a");
+
+
+    link.href =
+      url;
+
+    link.download =
+      filename;
+
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+      url
+    );
+
+
+    hideDownloadProgress(
+      true
+    );
+
+
+  } catch(error) {
+
+    console.error(error);
+
+    hideDownloadProgress();
+
+    alert(
+      "Unable to download JSON."
+    );
+
+  } finally {
 
     setDownloadButtons(
-        true
+      false
     );
 
-
-    try {
-
-        updateDownloadProgress(
-            20,
-            "Preparing Q&A data..."
-        );
-
-
-        await new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    150
-                )
-        );
-
-
-        updateDownloadProgress(
-            50,
-            "Creating JSON file..."
-        );
-
-
-        const json =
-            JSON.stringify(
-                finalData,
-                null,
-                2
-            );
-
-
-        const blob =
-            new Blob(
-                [json],
-                {
-                    type:
-                        "application/json"
-                }
-            );
-
-
-        updateDownloadProgress(
-            80,
-            "Preparing download..."
-        );
-
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-
-        const link =
-            document.createElement(
-                "a"
-            );
-
-
-        link.href =
-            url;
-
-
-        link.download =
-            filename;
-
-
-        document.body.appendChild(
-            link
-        );
-
-
-        link.click();
-
-
-        document.body.removeChild(
-            link
-        );
-
-
-        URL.revokeObjectURL(
-            url
-        );
-
-
-        updateDownloadProgress(
-            100,
-            "Download started."
-        );
-
-
-        hideDownloadProgress(
-            true
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "JSON download error:",
-            error
-        );
-
-
-        hideDownloadProgress(
-            false
-        );
-
-
-        alert(
-            "Failed to download JSON file."
-        );
-
-    }
-
-    finally {
-
-        setDownloadButtons(
-            false
-        );
-
-    }
+  }
 
 }
 
 
-/* =====================================================
+/* =========================================================
    DOWNLOAD PDF
-====================================================== */
+========================================================= */
 
 async function downloadPDF() {
 
-    if (
-        finalData.length === 0
+  if (!finalData.length) {
+
+    alert(
+      "Please click Submit before downloading PDF."
+    );
+
+    return;
+
+  }
+
+
+  const timestamp =
+    getTimestamp();
+
+
+  /*
+    Filename remains unchanged.
+  */
+
+  const filename =
+    `QA_Report_${timestamp}.pdf`;
+
+
+  showDownloadProgress(
+    "Preparing PDF",
+    filename
+  );
+
+
+  setDownloadButtons(true);
+
+
+  const pdfContainer =
+    document.getElementById(
+      "pdfContainer"
+    );
+
+
+  pdfContainer.innerHTML = "";
+
+
+  try {
+
+    const {
+      jsPDF
+    } = window.jspdf;
+
+
+    const pdf =
+      new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+
+
+    const pageWidth =
+      pdf.internal.pageSize.getWidth();
+
+
+    const pageHeight =
+      pdf.internal.pageSize.getHeight();
+
+
+    const margin = 10;
+
+
+    const usableWidth =
+      pageWidth -
+      margin * 2;
+
+
+    for (
+      let index = 0;
+      index < finalData.length;
+      index++
     ) {
 
-        alert(
-            "Please submit the Q&A before downloading the PDF."
+      const item =
+        finalData[index];
+
+
+      updateDownloadProgress(
+        Math.round(
+          (index /
+            finalData.length) *
+            90
+        ),
+        `Generating question ${index + 1} of ${finalData.length}...`
+      );
+
+
+      const card =
+        document.createElement(
+          "div"
         );
 
-        return;
+
+      card.className =
+        "pdf-card";
+
+
+      /*
+        Editable heading
+        appears inside PDF.
+      */
+
+      const title =
+        document.createElement(
+          "div"
+        );
+
+
+      title.className =
+        "pdf-title";
+
+
+      title.textContent =
+        getHeading();
+
+
+      const subtitle =
+        document.createElement(
+          "div"
+        );
+
+
+      subtitle.className =
+        "pdf-subtitle";
+
+
+      subtitle.textContent =
+        `Question ${index + 1} of ${finalData.length}`;
+
+
+      const question =
+        document.createElement(
+          "div"
+        );
+
+
+      question.className =
+        "pdf-question";
+
+
+      question.textContent =
+        `${index + 1}. ${item.question}`;
+
+
+      const answer =
+        document.createElement(
+          "div"
+        );
+
+
+      answer.className =
+        "pdf-answer";
+
+
+      answer.textContent =
+        item.answer ||
+        "No answer provided.";
+
+
+      card.appendChild(
+        title
+      );
+
+
+      card.appendChild(
+        subtitle
+      );
+
+
+      card.appendChild(
+        question
+      );
+
+
+      card.appendChild(
+        answer
+      );
+
+
+      if (item.code) {
+
+        const codeLabel =
+          document.createElement(
+            "div"
+          );
+
+
+        codeLabel.className =
+          "pdf-code-label";
+
+
+        codeLabel.textContent =
+          `Example Code — ${detectLanguage(
+            item.code
+          )}`;
+
+
+        const code =
+          document.createElement(
+            "div"
+          );
+
+
+        code.className =
+          "pdf-code";
+
+
+        code.textContent =
+          item.code;
+
+
+        card.appendChild(
+          codeLabel
+        );
+
+
+        card.appendChild(
+          code
+        );
+
+      }
+
+
+      pdfContainer.appendChild(
+        card
+      );
+
+
+      await delay(20);
+
+
+      const canvas =
+        await html2canvas(
+          card,
+          {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff"
+          }
+        );
+
+
+      const imageData =
+        canvas.toDataURL(
+          "image/png"
+        );
+
+
+      const imageWidth =
+        usableWidth;
+
+
+      let imageHeight =
+        (canvas.height /
+          canvas.width) *
+        imageWidth;
+
+
+      if (index > 0) {
+
+        pdf.addPage();
+
+      }
+
+
+      const maxHeight =
+        pageHeight -
+        margin * 2;
+
+
+      if (
+        imageHeight >
+        maxHeight
+      ) {
+
+        const scale =
+          maxHeight /
+          imageHeight;
+
+
+        imageHeight *=
+          scale;
+
+      }
+
+
+      pdf.addImage(
+        imageData,
+        "PNG",
+        margin,
+        margin,
+        imageWidth,
+        imageHeight
+      );
 
     }
 
 
-    const filename =
-        "QA_Report_" +
-        getTimestamp() +
-        ".pdf";
-
-
-    showDownloadProgress(
-        "Preparing PDF...",
-        filename
+    updateDownloadProgress(
+      95,
+      "Saving PDF..."
     );
 
+
+    await delay(300);
+
+
+    pdf.save(
+      filename
+    );
+
+
+    updateDownloadProgress(
+      100,
+      "PDF downloaded successfully."
+    );
+
+
+    hideDownloadProgress(
+      true
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      "PDF Error:",
+      error
+    );
+
+
+    hideDownloadProgress();
+
+
+    alert(
+      "Unable to generate PDF.\n\nPlease check the browser console for details."
+    );
+
+  } finally {
+
+    pdfContainer.innerHTML = "";
 
     setDownloadButtons(
-        true
+      false
     );
 
-
-    try {
-
-        const { jsPDF } =
-            window.jspdf;
-
-
-        const pdf =
-            new jsPDF(
-                "p",
-                "mm",
-                "a4"
-            );
-
-
-        const pageWidth =
-            210;
-
-
-        const pageHeight =
-            297;
-
-
-        const margin =
-            10;
-
-
-        const usableWidth =
-            pageWidth -
-            (margin * 2);
-
-
-        const usableHeight =
-            pageHeight -
-            (margin * 2);
-
-
-        let currentY =
-            margin;
-
-
-        const totalQuestions =
-            finalData.length;
-
-
-        /* =============================================
-           PROCESS EVERY QUESTION
-        ============================================== */
-
-        for (
-            let i = 0;
-            i < totalQuestions;
-            i++
-        ) {
-
-            const item =
-                finalData[i];
-
-
-            /*
-             * Progress:
-             * First 10% = preparation
-             * Remaining 85% = questions
-             * Last 5% = saving
-             */
-
-            const progress =
-                10 +
-                (
-                    (i / totalQuestions) *
-                    85
-                );
-
-
-            updateDownloadProgress(
-                progress,
-                `Generating question ${i + 1} of ${totalQuestions}...`
-            );
-
-
-            /* =========================================
-               PDF CARD
-            ========================================== */
-
-            const pdfCard =
-                document.createElement(
-                    "div"
-                );
-
-
-            pdfCard.className =
-                "pdf-card";
-
-
-            /* =========================================
-               TITLE
-            ========================================== */
-
-            const title =
-                document.createElement(
-                    "div"
-                );
-
-
-            title.className =
-                "pdf-title";
-
-
-            title.textContent =
-                item.number +
-                ". " +
-                item.question;
-
-
-            pdfCard.appendChild(
-                title
-            );
-
-
-            /* =========================================
-               ANSWER
-            ========================================== */
-
-            const answer =
-                document.createElement(
-                    "div"
-                );
-
-
-            answer.className =
-                "pdf-answer";
-
-
-            answer.textContent =
-                item.answer;
-
-
-            pdfCard.appendChild(
-                answer
-            );
-
-
-            /* =========================================
-               CODE
-            ========================================== */
-
-            if (
-                item.code
-            ) {
-
-                const codeBlock =
-                    createCodeBlock(
-                        item.code
-                    );
-
-
-                pdfCard.appendChild(
-                    codeBlock
-                );
-
-            }
-
-
-            /* =========================================
-               TEMPORARY PDF CONTAINER
-            ========================================== */
-
-            const pdfContainer =
-                document.getElementById(
-                    "pdfContainer"
-                );
-
-
-            pdfContainer.innerHTML =
-                "";
-
-
-            pdfContainer.appendChild(
-                pdfCard
-            );
-
-
-            /* =========================================
-               WAIT FOR RENDER
-            ========================================== */
-
-            await new Promise(
-                resolve =>
-                    requestAnimationFrame(
-                        resolve
-                    )
-            );
-
-
-            /* =========================================
-               CANVAS
-            ========================================== */
-
-            const canvas =
-                await html2canvas(
-                    pdfCard,
-                    {
-
-                        scale: 2,
-
-                        useCORS: true,
-
-                        backgroundColor:
-                            "#ffffff",
-
-                        logging: false
-
-                    }
-                );
-
-
-            const imgData =
-                canvas.toDataURL(
-                    "image/png"
-                );
-
-
-            const imgWidth =
-                usableWidth;
-
-
-            const imgHeight =
-                (
-                    canvas.height *
-                    imgWidth
-                ) /
-                canvas.width;
-
-
-            /* =========================================
-               NORMAL CARD
-            ========================================== */
-
-            if (
-                imgHeight <=
-                usableHeight
-            ) {
-
-                if (
-                    currentY +
-                    imgHeight >
-                    pageHeight -
-                    margin
-                ) {
-
-                    pdf.addPage();
-
-                    currentY =
-                        margin;
-
-                }
-
-
-                pdf.addImage(
-
-                    imgData,
-
-                    "PNG",
-
-                    margin,
-
-                    currentY,
-
-                    imgWidth,
-
-                    imgHeight
-
-                );
-
-
-                currentY +=
-                    imgHeight + 5;
-
-            }
-
-
-            /* =========================================
-               VERY LONG CARD
-            ========================================== */
-
-            else {
-
-                if (
-                    currentY !== margin
-                ) {
-
-                    pdf.addPage();
-
-                }
-
-
-                currentY =
-                    margin;
-
-
-                const scale =
-                    usableHeight /
-                    imgHeight;
-
-
-                const scaledWidth =
-                    imgWidth *
-                    scale;
-
-
-                const scaledHeight =
-                    usableHeight;
-
-
-                const centeredX =
-                    (
-                        pageWidth -
-                        scaledWidth
-                    ) / 2;
-
-
-                pdf.addImage(
-
-                    imgData,
-
-                    "PNG",
-
-                    centeredX,
-
-                    margin,
-
-                    scaledWidth,
-
-                    scaledHeight
-
-                );
-
-
-                if (
-                    i <
-                    totalQuestions - 1
-                ) {
-
-                    pdf.addPage();
-
-                }
-
-
-                currentY =
-                    margin;
-
-            }
-
-
-            /*
-             * Allow browser to update
-             * progress bar.
-             */
-
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        10
-                    )
-            );
-
-        }
-
-
-        /* =============================================
-           FINALIZE
-        ========================================== */
-
-        updateDownloadProgress(
-            95,
-            "Finalizing PDF..."
-        );
-
-
-        await new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    100
-                )
-        );
-
-
-        /* =============================================
-           SAVE
-        ========================================== */
-
-        pdf.save(
-            filename
-        );
-
-
-        updateDownloadProgress(
-            100,
-            "Download started."
-        );
-
-
-        hideDownloadProgress(
-            true
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "PDF download error:",
-            error
-        );
-
-
-        hideDownloadProgress(
-            false
-        );
-
-
-        alert(
-            "Failed to generate the PDF.\n\n" +
-            error.message
-        );
-
-    }
-
-    finally {
-
-        setDownloadButtons(
-            false
-        );
-
-    }
+  }
 
 }
 
 
-/* =====================================================
-   LOAD SAVED DRAFT
-====================================================== */
+/* =========================================================
+   DELAY
+========================================================= */
 
-window.onload =
-    function () {
+function delay(ms) {
 
-        const saved =
-            localStorage.getItem(
-                "qaDraft"
-            );
+  return new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        ms
+      )
+  );
 
-
-        if (saved) {
-
-            try {
-
-                const draft =
-                    JSON.parse(
-                        saved
-                    );
+}
 
 
-                if (
-                    Array.isArray(draft) &&
-                    draft.length > 0
-                ) {
+/* =========================================================
+   OVERLAY CLICK
+========================================================= */
 
-                    draft.forEach(
-                        item => {
+document
+  .getElementById(
+    "historyOverlay"
+  )
+  .addEventListener(
+    "click",
+    function(event) {
 
-                            addGroup(
-                                item
-                            );
+      if (
+        event.target === this
+      ) {
 
-                        }
-                    );
+        closeHistory();
 
-                }
+      }
 
-                else {
-
-                    addGroup();
-
-                }
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Failed to load draft:",
-                    error
-                );
+    }
+  );
 
 
-                addGroup();
+document
+  .getElementById(
+    "restartOverlay"
+  )
+  .addEventListener(
+    "click",
+    function(event) {
 
-            }
+      if (
+        event.target === this
+      ) {
+
+        closeRestartPopup();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key === "Escape"
+    ) {
+
+      closeHistory();
+
+      closeRestartPopup();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   LOAD SAVED DATA
+========================================================= */
+
+window.addEventListener(
+  "load",
+  function() {
+
+    /*
+      Restore saved heading.
+    */
+
+    const savedHeading =
+      localStorage.getItem(
+        HEADING_KEY
+      );
+
+
+    if (savedHeading) {
+
+      document.getElementById(
+        "headingName"
+      ).value =
+        savedHeading;
+
+    }
+
+
+    /*
+      Restore draft.
+    */
+
+    try {
+
+      const savedDraft =
+        localStorage.getItem(
+          DRAFT_KEY
+        );
+
+
+      if (savedDraft) {
+
+        const draft =
+          JSON.parse(
+            savedDraft
+          );
+
+
+        if (
+          draft.heading
+        ) {
+
+          document.getElementById(
+            "headingName"
+          ).value =
+            draft.heading;
 
         }
 
-        else {
 
-            addGroup();
+        if (
+          Array.isArray(
+            draft.data
+          ) &&
+          draft.data.length
+        ) {
+
+          draft.data.forEach(
+            item =>
+              addGroup(item)
+          );
+
+
+          return;
 
         }
 
-    };
+      }
+
+    } catch(error) {
+
+      console.error(
+        "Draft loading error:",
+        error
+      );
+
+    }
+
+
+    /*
+      Default question.
+    */
+
+    addGroup();
+
+  }
+);
 
 </script>
 
 </body>
-
 </html>
